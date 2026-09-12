@@ -26,7 +26,7 @@
 <h2>1. 選擇遊玩方式</h2>
 <div class="mode">
 <button type="button" id="freeBtn" class="modeBtn selected"><b>🎲 自由挑戰</b><br><span class="muted">每次各自隨機，適合自由練習。</span></button>
-<button type="button" id="classBtn" class="modeBtn"><b>🏫 課堂同步</b><br><span class="muted">全班同事件，等老師公布揭曉碼。</span></button>
+<button type="button" id="classBtn" class="modeBtn"><b>🏫 課堂同步</b><br><span class="muted">全班同事件，等老師公布。</span></button>
 </div>
 <div id="codeArea" class="codeArea off">
 <b>🔑 課堂代碼</b>
@@ -128,7 +128,7 @@ g('insuranceBtn').onclick=function(){if(!S.insurance&&spent()+2000>S.cash)return
 g('trainingBtn').onclick=function(){if(!S.training&&spent()+5000>S.cash)return;S.training=!S.training;updatePlay()};
 g('lockBtn').onclick=function(){var ev=(S.mode==='class')?classEvents(S.round):[pick(M,S.usedM),pick(L,S.usedL)];S.pending={ev:ev,a:{liquid:S.a.liquid,fixed:S.a.fixed,growth:S.a.growth,stable:S.a.stable},insurance:S.insurance,training:S.training,reason:g('reason').value};g('waitText').innerHTML=(S.mode==='class')?'配置已鎖定。請等待老師口頭宣布「可以揭曉」。':'配置已鎖定，準備好就揭曉隨機事件。';g('syncRevealBtn').className=(S.mode==='class')?'btn':'btn hidden';g('freeRevealBtn').className=(S.mode==='class')?'btn hidden':'btn';show('waitScreen')};
 g('freeRevealBtn').onclick=function(){resolveRound()};g('syncRevealBtn').onclick=function(){resolveRound()};
-g('revealBtn').onclick=function(){if(g('revealKeyInput').value.replace(/\s/g,'')!==revealKey(S.round)){g('keyError').className='error';return}resolveRound()};
+return}resolveRound()};
 function pct(x){return(x>=0?'+':'')+Math.round(x*100)+'%'}
 function signed(n){return(n>=0?'+':'−')+money(Math.abs(n))}
 function resolveRound(){var p=S.pending,m=p.ev[0],l=p.ev[1],cost=p.a.liquid+p.a.fixed+p.a.growth+p.a.stable+(p.insurance?2000:0)+(p.training?5000:0),before=wealth(),lm;S.cash=S.cash-cost+p.a.liquid;S.fixed+=p.a.fixed;S.growth+=p.a.growth;S.stable+=p.a.stable;if(p.training)S.wisdom=Math.min(100,S.wisdom+20);S.cash+=Math.round(S.cash*0.005);S.fixed+=Math.round(S.fixed*0.02);S.growth=Math.max(0,S.growth+Math.round(S.growth*m[2]));S.stable=Math.max(0,S.stable+Math.round(S.stable*m[3]));lm=p.insurance?l[3]:l[2];if(l[5])lm+=Math.round(S.wisdom*l[5]/100);S.cash+=lm;S.health=Math.max(0,Math.min(100,S.health+l[4]));if(p.training)S.skills++;S.history.push([S.round,m,l,before,wealth(),S.wisdom,S.health,p.reason]);g('eventCards').innerHTML='<div class="event"><h3>'+m[0]+' '+m[1]+'</h3><p>🚀 成長股 '+pct(m[2])+'<br>🏠 穩健股 '+pct(m[3])+'</p></div><div class="event"><h3>'+l[0]+' '+l[1]+'</h3><p>💰 金錢影響 '+signed(lm)+'<br>❤️ 健康影響 '+(l[4]>=0?'+':'')+l[4]+(p.insurance&&(l[0]==='🚑'||l[0]==='🤒')?'<br>🛡️ 保險已降低醫療支出':'')+'</p></div>';g('eventRound').innerHTML='第 '+S.round+' 輪';g('postWealth').innerHTML=money(wealth());g('postWisdom').innerHTML=S.wisdom;g('postHealth').innerHTML=S.health;g('nextBtn').innerHTML=(S.round===5)?'查看最終結局':'進入下一輪';updateTop();show('eventScreen')}
