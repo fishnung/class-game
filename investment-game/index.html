@@ -110,7 +110,7 @@ function state(){return{mode:'free',code:'',round:1,cash:22000,fixed:0,growth:0,
 var S=state(),selectedMode='free';
 function hash(s){var x=2166136261>>>0,i;for(i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}
 function seeded(s){var x=hash(s)||123456789;x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296}
-return String(1000+(sum%9000))}
+
 function classEvents(r){var m=M.slice(0),l=L.slice(0),me,le,i,mi,li;for(i=1;i<=r;i++){mi=Math.floor(seeded(S.code+'-M-'+i)*m.length);li=Math.floor(seeded(S.code+'-L-'+i)*l.length);me=m.splice(mi,1)[0];le=l.splice(li,1)[0]}return[me,le]}
 function pick(pool,used){var choices=[],i,idx;for(i=0;i<pool.length;i++){if(used.indexOf(i)<0)choices.push(i)}idx=choices[Math.floor(Math.random()*choices.length)];used.push(idx);return pool[idx]}
 function show(id){var screens=document.getElementsByClassName('screen'),i;for(i=0;i<screens.length;i++)screens[i].className='screen';g(id).className='screen active';window.scrollTo(0,0)}
