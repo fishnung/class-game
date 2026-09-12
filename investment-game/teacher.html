@@ -1,11 +1,109 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>教師端｜投資大富翁</title><style>body{margin:0;font-family:system-ui,"Noto Sans TC",sans-serif;background:#f4f1fb;color:#182033}.w{max-width:900px;margin:auto;padding:22px}.hero,.card{background:white;border:1px solid #e4e5e9;border-radius:20px;padding:20px;margin-bottom:15px}.hero{background:#59449c;color:white}.code{font-size:40px;font-weight:900;letter-spacing:.14em;text-align:center;border:2px dashed #a99bd4;border-radius:15px;padding:15px;background:#faf8ff}.btn{border:0;border-radius:11px;padding:10px 14px;background:#6750a4;color:white;font-weight:900;cursor:pointer}.r{display:grid;grid-template-columns:75px 1fr 110px;gap:10px;padding:12px;border-bottom:1px solid #eee}.warn{background:#fff8e7;border-left:4px solid #dfb746;padding:12px}.muted{color:#667085}@media(max-width:650px){.r{grid-template-columns:1fr}}</style></head><body><main class="w"><section class="hero"><b>獨立教師頁面・學生端沒有入口</b><h1>🧑‍🏫 投資大富翁教師端</h1><p>產生課堂代碼後，全班輸入同一代碼。每輪先鎖定選擇，再由你口頭宣布「可以揭曉」。</p></section><section class="card"><h2>課堂代碼</h2><div id="code" class="code"></div><p><button id="newCodeBtn" class="btn">🎲 產生新代碼</button></p></section><section class="card"><h2>五輪事件</h2><p class="warn">確認各組都已顯示「本輪決策已鎖定」後，再口頭宣布「可以揭曉」。</p><div id="rounds"></div></section><section class="card"><h2>學生網址</h2><p>https://fishnung.github.io/class-game/investment-game/</p><p class="muted">教師頁不放在學生入口中。請自行收藏：/investment-game/teacher.html</p></section></main><script>
-const M=[['🚀','科技浪潮！市場大漲'],['📈','景氣回溫'],['😶','市場觀望'],['🏦','升息風聲'],['📉','股市急跌'],['🌪️','全球市場震盪'],['🏘️','民生需求穩定'],['🔄','跌深反彈']],L=[['🚑','突發交通事故'],['🤒','流感住院'],['📦','公司縮編'],['🎉','工作表現被看見'],['💼','接到臨時專案'],['🏠','家庭臨時支出'],['🌿','平安又充實的一個月'],['🏅','學習成果得獎'],['😵','工作壓力爆表'],['🧧','意外獎金']];
-function h(s){let x=2166136261>>>0;for(let i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}function r(s){let x=h(s)||123456789;x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296}return String(1000+(sum%9000))}function e(c,n){let m=M.slice(),l=L.slice(),a,b;for(let i=1;i<=n;i++){a=m.splice(Math.floor(r(c+'-M-'+i)*m.length),1)[0];b=l.splice(Math.floor(r(c+'-L-'+i)*l.length),1)[0]}return[a,b]}function make(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',x=new Uint32Array(6);crypto.getRandomValues(x);return [...x].map(n=>a[n%a.length]).join('')}const codeEl=document.getElementById('code');
-const roundsEl=document.getElementById('rounds');
-const newCodeBtn=document.getElementById('newCodeBtn');
-function draw(c){codeEl.textContent=c;roundsEl.innerHTML=[1,2,3,4,5].map(n=>{let x=e(c,n);return '<div class="r"><b>第 '+n+' 輪</b><span>'+x[0][0]+' '+x[0][1]+' ＋ '+x[1][0]+' '+x[1][1]+'</span></div>'}).join('')}
-newCodeBtn.addEventListener('click',()=>{let c=make();localStorage.setItem('invCode',c);draw(c)});
-const initialCode=localStorage.getItem('invCode')||make();
-localStorage.setItem('invCode',initialCode);
-draw(initialCode);
-</script></body></html>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>教師端｜投資大富翁</title>
+<style>
+body{margin:0;font-family:Arial,"Noto Sans TC",sans-serif;background:#f4f1fb;color:#182033}
+.w{max-width:900px;margin:auto;padding:22px}
+.hero,.card{background:#fff;border:1px solid #e4e5e9;border-radius:20px;padding:20px;margin-bottom:15px}
+.hero{background:#59449c;color:#fff}
+.code{font-size:40px;font-weight:900;letter-spacing:.14em;text-align:center;border:2px dashed #a99bd4;border-radius:15px;padding:15px;background:#faf8ff}
+.btn{border:0;border-radius:11px;padding:11px 15px;background:#6750a4;color:#fff;font-weight:900;cursor:pointer;font-size:16px}
+.r{display:grid;grid-template-columns:75px 1fr;gap:10px;padding:12px;border-bottom:1px solid #eee}
+.warn{background:#fff8e7;border-left:4px solid #dfb746;padding:12px}
+.muted{color:#667085}
+@media(max-width:650px){.r{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="w">
+<section class="hero">
+<b>獨立教師頁面・學生端沒有入口</b>
+<h1>🧑‍🏫 投資大富翁教師端</h1>
+<p>產生課堂代碼後，全班輸入同一代碼。每輪先鎖定選擇，再由你口頭宣布「可以揭曉」。</p>
+</section>
+
+<section class="card">
+<h2>課堂代碼</h2>
+<div id="code" class="code">------</div>
+<p><button id="newCodeBtn" class="btn" type="button">🎲 產生新代碼</button></p>
+</section>
+
+<section class="card">
+<h2>五輪事件</h2>
+<p class="warn">確認各組都已顯示「本輪決策已鎖定」後，再口頭宣布「可以揭曉」。</p>
+<div id="rounds"></div>
+</section>
+
+<section class="card">
+<h2>學生網址</h2>
+<p>https://fishnung.github.io/class-game/investment-game/</p>
+<p class="muted">教師頁不放在學生入口中。請自行收藏：/investment-game/teacher.html</p>
+</section>
+</main>
+
+<script>
+(function(){
+var M=[['🚀','科技浪潮！市場大漲'],['📈','景氣回溫'],['😶','市場觀望'],['🏦','升息風聲'],['📉','股市急跌'],['🌪️','全球市場震盪'],['🏘️','民生需求穩定'],['🔄','跌深反彈']];
+var L=[['🚑','突發交通事故'],['🤒','流感住院'],['📦','公司縮編'],['🎉','工作表現被看見'],['💼','接到臨時專案'],['🏠','家庭臨時支出'],['🌿','平安又充實的一個月'],['🏅','學習成果得獎'],['😵','工作壓力爆表'],['🧧','意外獎金']];
+
+function h(s){
+  var x=2166136261>>>0,i;
+  for(i=0;i<s.length;i++){
+    x^=s.charCodeAt(i);
+    x=Math.imul(x,16777619);
+  }
+  return x>>>0;
+}
+function r(s){
+  var x=h(s)||123456789;
+  x^=x<<13;
+  x^=x>>>17;
+  x^=x<<5;
+  return (x>>>0)/4294967296;
+}
+function eventsFor(code,n){
+  var m=M.slice(0),l=L.slice(0),a,b,i;
+  for(i=1;i<=n;i++){
+    a=m.splice(Math.floor(r(code+'-M-'+i)*m.length),1)[0];
+    b=l.splice(Math.floor(r(code+'-L-'+i)*l.length),1)[0];
+  }
+  return [a,b];
+}
+function makeCode(){
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var out='',i;
+  if(window.crypto&&window.crypto.getRandomValues){
+    var x=new Uint32Array(6);
+    window.crypto.getRandomValues(x);
+    for(i=0;i<6;i++) out+=chars.charAt(x[i]%chars.length);
+  }else{
+    for(i=0;i<6;i++) out+=chars.charAt(Math.floor(Math.random()*chars.length));
+  }
+  return out;
+}
+function draw(code){
+  document.getElementById('code').innerHTML=code;
+  var html='',i,e;
+  for(i=1;i<=5;i++){
+    e=eventsFor(code,i);
+    html+='<div class="r"><b>第 '+i+' 輪</b><span>'+e[0][0]+' '+e[0][1]+' ＋ '+e[1][0]+' '+e[1][1]+'</span></div>';
+  }
+  document.getElementById('rounds').innerHTML=html;
+}
+function setNewCode(){
+  var code=makeCode();
+  try{localStorage.setItem('invCode',code)}catch(err){}
+  draw(code);
+}
+document.getElementById('newCodeBtn').onclick=setNewCode;
+var initial='';
+try{initial=localStorage.getItem('invCode')||''}catch(err){}
+if(!initial) initial=makeCode();
+draw(initial);
+})();
+</script>
+</body>
+</html>
