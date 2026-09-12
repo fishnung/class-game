@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>2.2 萬投資大富翁</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans TC",sans-serif;background:#f6f4fb;color:#182033}.w{max-width:1000px;margin:auto;padding:18px}.hero{background:#59449c;color:#fff;border-radius:22px;padding:22px}.hero h1{margin:5px 0}.stats,.mode,.grid,.scores,.events,.awards{display:grid;gap:12px}.stats{grid-template-columns:repeat(4,1fr);margin-top:12px}.stat,.card,.tool,.score,.event,.award{background:#fff;border:1px solid #e0e2e7;border-radius:15px;padding:14px}.stat{color:#182033}.stat small{display:block;color:#687386}.stat b{font-size:22px}.card{margin-top:15px}.mode{grid-template-columns:1fr 1fr}.modeBtn{display:block;background:#eef0f5;color:#293240;border:2px solid transparent;border-radius:14px;padding:15px;text-align:left;font-size:16px;cursor:pointer}.modeBtn.selected{border-color:#6750a4;background:#f4efff}.modeBtn input{width:auto;margin-right:8px}.codeArea{background:#fff8df;border:1px solid #ebcd6b;border-radius:14px;padding:14px;margin-top:12px}.codeArea.off{opacity:.45}.codeArea input{font-size:20px;text-transform:uppercase}.btn{border:0;border-radius:11px;padding:12px 16px;background:#6750a4;color:#fff;font-weight:bold;cursor:pointer;font-size:16px}.btn.secondary{background:#eef0f5;color:#293240}.screen{display:none}.screen.active{display:block}.hidden{display:none!important}.grid{grid-template-columns:1.3fr .7fr}.tools{display:grid;gap:10px}.tool{display:flex;align-items:center;justify-content:space-between;gap:10px}.tool small{display:block;color:#687386;margin-top:4px}.counter{display:flex;align-items:center;gap:8px}.counter button{width:38px;height:38px;border:0;border-radius:9px;font-size:20px}.amount{min-width:88px;text-align:center;font-weight:bold}.big{font-size:30px;font-weight:900}.muted{color:#687386}.error{color:#b42318;font-weight:bold}.pill{display:inline-block;border-radius:999px;padding:6px 10px;background:#eee9ff;color:#55418d;font-weight:bold}.scores{grid-template-columns:repeat(3,1fr)}.events{grid-template-columns:1fr 1fr}.awards{grid-template-columns:1fr 1fr}.won{background:#fff4cd}.award small{display:block;color:#687386;margin-top:6px;line-height:1.5}.shareBox{background:#eef8f4;border:1px solid #a8d8c6;border-radius:14px;padding:14px;margin-top:16px}.shareBox textarea{font-family:monospace;font-size:12px}.hist{border-bottom:1px solid #eee;padding:10px 0}input,textarea{width:100%;padding:11px;border:1px solid #c9ced6;border-radius:10px;font:inherit}.wait{text-align:center;padding:28px}.waitIcon{font-size:50px}@media(max-width:760px){.stats,.mode,.grid,.scores,.events,.awards{grid-template-columns:1fr}.tool{align-items:flex-start;flex-direction:column}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans TC",sans-serif;background:#f6f4fb;color:#182033}.w{max-width:1000px;margin:auto;padding:18px}.hero{background:#59449c;color:#fff;border-radius:22px;padding:22px}.hero h1{margin:5px 0}.stats,.grid,.scores,.events,.awards{display:grid;gap:12px}.stats{grid-template-columns:repeat(4,1fr);margin-top:12px}.stat,.card,.tool,.score,.event,.award{background:#fff;border:1px solid #e0e2e7;border-radius:15px;padding:14px}.stat{color:#182033}.stat small{display:block;color:#687386}.stat b{font-size:22px}.card{margin-top:15px}.btn{border:0;border-radius:11px;padding:12px 16px;background:#6750a4;color:#fff;font-weight:bold;cursor:pointer;font-size:16px}.btn.secondary{background:#eef0f5;color:#293240}.screen{display:none}.screen.active{display:block}.hidden{display:none!important}.grid{grid-template-columns:1.3fr .7fr}.tools{display:grid;gap:10px}.tool{display:flex;align-items:center;justify-content:space-between;gap:10px}.tool small{display:block;color:#687386;margin-top:4px}.counter{display:flex;align-items:center;gap:8px}.counter button{width:38px;height:38px;border:0;border-radius:9px;font-size:20px}.amount{min-width:88px;text-align:center;font-weight:bold}.big{font-size:30px;font-weight:900}.muted{color:#687386}.pill{display:inline-block;border-radius:999px;padding:6px 10px;background:#eee9ff;color:#55418d;font-weight:bold}.scores{grid-template-columns:repeat(3,1fr)}.events{grid-template-columns:1fr 1fr}.awards{grid-template-columns:1fr 1fr}.won{background:#fff4cd}.award small{display:block;color:#687386;margin-top:6px;line-height:1.5}.hist{border-bottom:1px solid #eee;padding:10px 0}input,textarea{width:100%;padding:11px;border:1px solid #c9ced6;border-radius:10px;font:inherit}.wait{text-align:center;padding:28px}.waitIcon{font-size:50px}.downloadBox{background:#eef8f4;border:1px solid #a8d8c6;border-radius:14px;padding:14px;margin-top:16px}@media(max-width:760px){.stats,.grid,.scores,.events,.awards{grid-template-columns:1fr}.tool{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
 <main class="w">
 <section class="hero">
 <div>五輪理財體驗</div><h1>💰 2.2 萬投資大富翁</h1>
-<p>目標不是只賺最多，而是同時累積金融資產、智慧資產與健康安全。</p>
+<p>每一輪都可能遇到不同情境。目標不是只賺最多，而是同時兼顧金融資產、智慧與健康。</p>
 <div class="stats">
 <div class="stat"><small>💰 現金</small><b id="cash">$22,000</b></div>
 <div class="stat"><small>🏦 金融資產</small><b id="wealth">$22,000</b></div>
@@ -20,27 +20,20 @@
 <div class="stat"><small>❤️ 健康</small><b id="health">100</b></div>
 </div>
 </section>
+
 <section id="startScreen" class="screen active">
 <div class="card">
-<h2>1. 選擇遊玩方式</h2>
-<div class="mode">
-<label class="modeBtn selected" id="freeLabel"><input type="radio" name="gameMode" value="free" checked><b>🎲 自由挑戰</b><br><span class="muted">每次各自隨機，適合自由練習。</span></label>
-<label class="modeBtn" id="classLabel"><input type="radio" name="gameMode" value="class"><b>🏫 課堂同步</b><br><span class="muted">全班使用同一課堂代碼，五輪事件相同。</span></label>
-</div>
-<div id="codeArea" class="codeArea off">
-<b>🔑 課堂代碼</b>
-<p class="muted" id="codeHint">選擇「課堂同步」後輸入老師公布的代碼。</p>
-<input id="classCode" maxlength="8" placeholder="例如 A7K2Q9" disabled>
-<div id="codeError" class="error hidden">請先輸入課堂代碼。</div>
-</div>
-<h2>2. 輸入隊伍名稱</h2>
+<h2>準備開始挑戰</h2>
+<p class="muted">先幫你們的小隊取一個名字，接著直接進入五輪隨機挑戰。</p>
+<label><b>隊伍名稱</b></label>
 <input id="teamName" maxlength="20" placeholder="例如：穩穩賺小隊">
-<p><button type="button" id="startGameBtn" class="btn">開始挑戰</button></p>
+<p><button type="button" id="startGameBtn" class="btn">🎲 開始挑戰</button></p>
 </div>
 </section>
+
 <section id="playScreen" class="screen">
 <div class="card">
-<span id="roundLabel" class="pill">第 1 / 5 輪</span> <b id="modeLabel"></b>
+<span id="roundLabel" class="pill">第 1 / 5 輪</span>
 <h2>先配置，再揭曉未來</h2>
 <div class="grid">
 <div class="tools">
@@ -51,7 +44,7 @@
 <div class="tool"><div><b>🚀 成長型股票</b><small>高波動，可能大漲也可能大跌。</small></div><div class="counter"><button type="button" data-item="growth" data-delta="-1000">−</button><span class="amount" id="amtGrowth">$0</span><button type="button" data-item="growth" data-delta="1000">＋</button></div></div>
 <div class="tool"><div><b>🏠 穩健型股票</b><small>波動較小，報酬通常也較低。</small></div><div class="counter"><button type="button" data-item="stable" data-delta="-1000">−</button><span class="amount" id="amtStable">$0</span><button type="button" data-item="stable" data-delta="1000">＋</button></div></div>
 <h3>我們為什麼這樣分配？</h3>
-<textarea id="reason" rows="4"></textarea>
+<textarea id="reason" rows="4" placeholder="記下你們這一輪的想法"></textarea>
 </div>
 <div class="card">
 <small>尚未配置現金</small><div id="available" class="big">$22,000</div>
@@ -61,13 +54,16 @@
 </div>
 </div>
 </section>
+
 <section id="waitScreen" class="screen">
 <div class="card wait">
-<div class="waitIcon">🔒</div><h2>本輪決策已鎖定</h2><p id="waitText"></p>
-<button type="button" id="syncRevealBtn" class="btn hidden">👀 老師已公布，查看本輪事件</button>
-<button type="button" id="freeRevealBtn" class="btn">🎲 揭曉隨機事件</button>
+<div class="waitIcon">🎲</div>
+<h2>本輪決策已鎖定</h2>
+<p>準備好就揭曉這一輪的隨機事件。</p>
+<button type="button" id="revealBtn" class="btn">揭曉隨機事件</button>
 </div>
 </section>
+
 <section id="eventScreen" class="screen">
 <div class="card">
 <span id="eventRound" class="pill"></span><h2>事件揭曉</h2><div id="eventCards" class="events"></div>
@@ -79,71 +75,64 @@
 <p><button type="button" id="nextBtn" class="btn">下一輪</button></p>
 </div>
 </section>
+
 <section id="finalScreen" class="screen">
 <div class="card">
-<span class="pill">五輪完成</span><h2 id="endingType"></h2><p>想一想：哪些結果來自選擇？哪些來自運氣？</p>
+<span class="pill">五輪完成</span><h2 id="endingType"></h2>
+<p>想一想：哪些結果來自選擇？哪些來自運氣？如果換成別的情境，你們會怎麼調整？</p>
 <div class="scores">
 <div class="score">🏦 最終金融資產<div id="finalWealth" class="big"></div></div>
 <div class="score">🧠 智慧<div id="finalWisdom" class="big"></div></div>
 <div class="score">❤️ 健康<div id="finalHealth" class="big"></div></div>
 </div>
 <h3>🏆 結局獎項</h3><div id="awards" class="awards"></div>
-<div class="shareBox">
-<h3>📤 把結果交給老師</h3>
-<p class="muted">按「複製結果碼」，再貼到老師的教師端，全班就能一起比較。</p>
-<textarea id="resultCode" rows="4" readonly></textarea>
-<p><button type="button" id="copyResultBtn" class="btn">📋 複製結果碼</button> <span id="copyStatus" class="muted"></span></p>
+<div class="downloadBox">
+<h3>📥 下載挑戰結果</h3>
+<p class="muted">下載後會得到 CSV 檔，包含五輪事件、資產變化、最後指標與獎項。</p>
+<button type="button" id="downloadBtn" class="btn">下載結果 CSV</button>
 </div>
 <h3>📜 五輪紀錄</h3><div id="historyList"></div>
-<p><button type="button" id="restartBtn" class="btn">再玩一次</button></p>
+<p><button type="button" id="restartBtn" class="btn secondary">再玩一次</button></p>
 </div>
 </section>
 </main>
+
 <script>
 (function(){
 var M=[['🚀','科技浪潮！市場大漲',0.35,0.10],['📈','景氣回溫',0.18,0.07],['😶','市場觀望',0,0.02],['🏦','升息風聲',-0.12,-0.03],['📉','股市急跌',-0.38,-0.10],['🌪️','全球市場震盪',-0.24,-0.06],['🏘️','民生需求穩定',0.03,0.09],['🔄','跌深反彈',0.24,0.06]];
 var L=[['🚑','突發交通事故',-15000,-2000,-18,0],['🤒','流感住院',-8000,-1500,-12,0],['📦','公司縮編',-6500,-6500,-6,45],['🎉','工作表現被看見',2500,2500,2,80],['💼','接到臨時專案',1200,1200,-1,60],['🏠','家庭臨時支出',-5000,-5000,-2,0],['🌿','平安又充實的一個月',0,0,8,0],['🏅','學習成果得獎',1000,1000,3,45],['😵','工作壓力爆表',1200,1200,-10,0],['🧧','意外獎金',3500,3500,2,0]];
 function g(id){return document.getElementById(id)}
 function money(n){return '$'+Math.round(n).toLocaleString()}
-function newState(){return{team:'未命名小隊',mode:'free',code:'',round:1,cash:22000,fixed:0,growth:0,stable:0,wisdom:20,health:100,skills:0,insurance:false,training:false,a:{liquid:0,fixed:0,growth:0,stable:0},usedM:[],usedL:[],history:[],pending:null}}
-var S=newState();
-function hash(s){var x=2166136261>>>0,i;for(i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}
-function seeded(s){var x=hash(s)||123456789;x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296}
-function classEvents(r){var m=M.slice(0),l=L.slice(0),me,le,i,mi,li;for(i=1;i<=r;i++){mi=Math.floor(seeded(S.code+'-M-'+i)*m.length);li=Math.floor(seeded(S.code+'-L-'+i)*l.length);me=m.splice(mi,1)[0];le=l.splice(li,1)[0]}return[me,le]}
+function fresh(){return{team:'未命名小隊',round:1,cash:22000,fixed:0,growth:0,stable:0,wisdom:20,health:100,skills:0,insurance:false,training:false,a:{liquid:0,fixed:0,growth:0,stable:0},usedM:[],usedL:[],history:[],pending:null}}
+var S=fresh();
 function pick(pool,used){var choices=[],i,idx;for(i=0;i<pool.length;i++){if(used.indexOf(i)<0)choices.push(i)}idx=choices[Math.floor(Math.random()*choices.length)];used.push(idx);return pool[idx]}
-function show(id){var screens=document.getElementsByClassName('screen'),i;for(i=0;i<screens.length;i++){screens[i].className='screen'}g(id).className='screen active';window.scrollTo(0,0)}
+function show(id){var screens=document.getElementsByClassName('screen'),i;for(i=0;i<screens.length;i++)screens[i].className='screen';g(id).className='screen active';window.scrollTo(0,0)}
 function wealth(){return S.cash+S.fixed+S.growth+S.stable}
 function updateTop(){g('cash').innerHTML=money(S.cash);g('wealth').innerHTML=money(wealth());g('wisdom').innerHTML=S.wisdom;g('health').innerHTML=S.health}
 function spent(){return S.a.liquid+S.a.fixed+S.a.growth+S.a.stable+(S.insurance?2000:0)+(S.training?5000:0)}
 function updatePlay(){g('amtLiquid').innerHTML=money(S.a.liquid);g('amtFixed').innerHTML=money(S.a.fixed);g('amtGrowth').innerHTML=money(S.a.growth);g('amtStable').innerHTML=money(S.a.stable);g('available').innerHTML=money(S.cash-spent());g('insuranceBtn').innerHTML=S.insurance?'✅ 已投保 $2,000':'不投保';g('trainingBtn').innerHTML=S.training?'✅ 已進修 $5,000':'不進修';g('incomeText').innerHTML='下一輪基本收入：'+money(6000+S.skills*2000);g('lockBtn').disabled=(S.cash-spent()<0);updateTop()}
-function currentMode(){var radios=document.getElementsByName('gameMode'),i;for(i=0;i<radios.length;i++){if(radios[i].checked)return radios[i].value}return'free'}
-function syncModeUI(){var mode=currentMode();g('freeLabel').className='modeBtn'+(mode==='free'?' selected':'');g('classLabel').className='modeBtn'+(mode==='class'?' selected':'');g('classCode').disabled=(mode!=='class');g('codeArea').className='codeArea'+(mode==='class'?'':' off');g('codeHint').innerHTML=(mode==='class')?'請輸入老師公布的課堂代碼。':'選擇「課堂同步」後輸入老師公布的代碼。'}
-var modeRadios=document.getElementsByName('gameMode'),mi;for(mi=0;mi<modeRadios.length;mi++){modeRadios[mi].onchange=syncModeUI}
-g('startGameBtn').onclick=function(){var mode=currentMode();S=newState();S.team=g('teamName').value.replace(/^\s+|\s+$/g,'')||'未命名小隊';S.mode=mode;S.code=g('classCode').value.replace(/\s/g,'').toUpperCase();if(S.mode==='class'&&!S.code){g('codeError').className='error';return}g('codeError').className='error hidden';g('roundLabel').innerHTML='第 1 / 5 輪';g('modeLabel').innerHTML=(S.mode==='class'?'🏫 課堂同步｜'+S.code:'🎲 自由挑戰');show('playScreen');updatePlay()};
+g('startGameBtn').onclick=function(){S=fresh();S.team=g('teamName').value.replace(/^\s+|\s+$/g,'')||'未命名小隊';show('playScreen');updatePlay()};
 var cBtns=document.querySelectorAll('[data-item]'),ci;for(ci=0;ci<cBtns.length;ci++){cBtns[ci].onclick=function(){var k=this.getAttribute('data-item'),d=parseInt(this.getAttribute('data-delta'),10);if(d>0&&spent()+d>S.cash)return;S.a[k]=Math.max(0,S.a[k]+d);updatePlay()}}
 g('insuranceBtn').onclick=function(){if(!S.insurance&&spent()+2000>S.cash)return;S.insurance=!S.insurance;updatePlay()};
 g('trainingBtn').onclick=function(){if(!S.training&&spent()+5000>S.cash)return;S.training=!S.training;updatePlay()};
-g('lockBtn').onclick=function(){var ev=(S.mode==='class')?classEvents(S.round):[pick(M,S.usedM),pick(L,S.usedL)];S.pending={ev:ev,a:{liquid:S.a.liquid,fixed:S.a.fixed,growth:S.a.growth,stable:S.a.stable},insurance:S.insurance,training:S.training,reason:g('reason').value};g('waitText').innerHTML=(S.mode==='class')?'配置已鎖定。請等待老師口頭宣布「可以揭曉」。':'配置已鎖定，準備好就揭曉隨機事件。';g('syncRevealBtn').className=(S.mode==='class')?'btn':'btn hidden';g('freeRevealBtn').className=(S.mode==='class')?'btn hidden':'btn';show('waitScreen')};
-g('freeRevealBtn').onclick=function(){resolveRound()};g('syncRevealBtn').onclick=function(){resolveRound()};
+g('lockBtn').onclick=function(){S.pending={ev:[pick(M,S.usedM),pick(L,S.usedL)],a:{liquid:S.a.liquid,fixed:S.a.fixed,growth:S.a.growth,stable:S.a.stable},insurance:S.insurance,training:S.training,reason:g('reason').value};show('waitScreen')};
+g('revealBtn').onclick=function(){resolveRound()};
 function pct(x){return(x>=0?'+':'')+Math.round(x*100)+'%'}
 function signed(n){return(n>=0?'+':'−')+money(Math.abs(n))}
-function resolveRound(){var p=S.pending,m=p.ev[0],l=p.ev[1],cost=p.a.liquid+p.a.fixed+p.a.growth+p.a.stable+(p.insurance?2000:0)+(p.training?5000:0),before=wealth(),lm;S.cash=S.cash-cost+p.a.liquid;S.fixed+=p.a.fixed;S.growth+=p.a.growth;S.stable+=p.a.stable;if(p.training)S.wisdom=Math.min(100,S.wisdom+20);S.cash+=Math.round(S.cash*0.005);S.fixed+=Math.round(S.fixed*0.02);S.growth=Math.max(0,S.growth+Math.round(S.growth*m[2]));S.stable=Math.max(0,S.stable+Math.round(S.stable*m[3]));lm=p.insurance?l[3]:l[2];if(l[5])lm+=Math.round(S.wisdom*l[5]/100);S.cash+=lm;S.health=Math.max(0,Math.min(100,S.health+l[4]));if(p.training)S.skills++;S.history.push([S.round,m,l,before,wealth(),S.wisdom,S.health,p.reason]);g('eventCards').innerHTML='<div class="event"><h3>'+m[0]+' '+m[1]+'</h3><p>🚀 成長股 '+pct(m[2])+'<br>🏠 穩健股 '+pct(m[3])+'</p></div><div class="event"><h3>'+l[0]+' '+l[1]+'</h3><p>💰 金錢影響 '+signed(lm)+'<br>❤️ 健康影響 '+(l[4]>=0?'+':'')+l[4]+(p.insurance&&(l[0]==='🚑'||l[0]==='🤒')?'<br>🛡️ 保險已降低醫療支出':'')+'</p></div>';g('eventRound').innerHTML='第 '+S.round+' 輪';g('postWealth').innerHTML=money(wealth());g('postWisdom').innerHTML=S.wisdom;g('postHealth').innerHTML=S.health;g('nextBtn').innerHTML=(S.round===5)?'查看最終結局':'進入下一輪';updateTop();show('eventScreen')}
+function resolveRound(){var p=S.pending,m=p.ev[0],l=p.ev[1],cost=p.a.liquid+p.a.fixed+p.a.growth+p.a.stable+(p.insurance?2000:0)+(p.training?5000:0),before=wealth(),lm;S.cash=S.cash-cost+p.a.liquid;S.fixed+=p.a.fixed;S.growth+=p.a.growth;S.stable+=p.a.stable;if(p.training)S.wisdom=Math.min(100,S.wisdom+20);S.cash+=Math.round(S.cash*0.005);S.fixed+=Math.round(S.fixed*0.02);S.growth=Math.max(0,S.growth+Math.round(S.growth*m[2]));S.stable=Math.max(0,S.stable+Math.round(S.stable*m[3]));lm=p.insurance?l[3]:l[2];if(l[5])lm+=Math.round(S.wisdom*l[5]/100);S.cash+=lm;S.health=Math.max(0,Math.min(100,S.health+l[4]));if(p.training)S.skills++;S.history.push({round:S.round,market:m[1],life:l[1],before:before,after:wealth(),wisdom:S.wisdom,health:S.health,reason:p.reason,insurance:p.insurance,training:p.training});g('eventCards').innerHTML='<div class="event"><h3>'+m[0]+' '+m[1]+'</h3><p>🚀 成長股 '+pct(m[2])+'<br>🏠 穩健股 '+pct(m[3])+'</p></div><div class="event"><h3>'+l[0]+' '+l[1]+'</h3><p>💰 金錢影響 '+signed(lm)+'<br>❤️ 健康影響 '+(l[4]>=0?'+':'')+l[4]+(p.insurance&&(l[0]==='🚑'||l[0]==='🤒')?'<br>🛡️ 保險已降低醫療支出':'')+'</p></div>';g('eventRound').innerHTML='第 '+S.round+' 輪';g('postWealth').innerHTML=money(wealth());g('postWisdom').innerHTML=S.wisdom;g('postHealth').innerHTML=S.health;g('nextBtn').innerHTML=(S.round===5)?'查看最終結局':'進入下一輪';updateTop();show('eventScreen')}
 g('nextBtn').onclick=function(){if(S.round===5){finish();return}S.round++;S.cash+=6000+S.skills*2000;S.a={liquid:0,fixed:0,growth:0,stable:0};S.insurance=false;S.training=false;g('reason').value='';g('roundLabel').innerHTML='第 '+S.round+' / 5 輪';updatePlay();show('playScreen')};
-function escapeHtml(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function encodeResult(obj){try{return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}catch(err){return encodeURIComponent(JSON.stringify(obj))}}
-function finish(){var W=wealth(),t,A,i,out='',wealthPath=[],payload;if(W>=30000&&S.wisdom>=60&&S.health>=75)t='🌟 均衡成長型理財家';else if(S.wisdom>=70)t='🧠 未來潛力型理財家';else if(S.health>=85&&S.cash>=6000)t='🛡️ 穩健防守型理財家';else if(W>=32000&&S.health<65)t='💸 高報酬冒險家';else t='🧭 探索中的理財家';g('endingType').innerHTML=t;g('finalWealth').innerHTML=money(W);g('finalWisdom').innerHTML=S.wisdom;g('finalHealth').innerHTML=S.health;A=[
-['🤑 財富王',W>=30000,'看「最終金融資產」：達到 $30,000 以上'],
-['🌱 成長王',S.wisdom>=60,'看「智慧資產」：達到 60 分以上'],
-['❤️ 健康守門員',S.health>=80,'看「健康資產」：達到 80 分以上'],
-['⚖️ 理財王',W>=26000&&S.wisdom>=60&&S.health>=75&&S.cash>=5000,'綜合門檻：金融資產 ≥ $26,000、智慧 ≥ 60、健康 ≥ 75，而且手上現金 ≥ $5,000']
-];for(i=0;i<A.length;i++){out+='<div class="award '+(A[i][1]?'won':'')+'"><b>'+A[i][0]+' '+(A[i][1]?'✅':'⬜')+'</b><small>'+A[i][2]+'</small></div>'}g('awards').innerHTML=out;out='';for(i=0;i<S.history.length;i++){var x=S.history[i];out+='<div class="hist"><b>第 '+x[0]+' 輪｜'+x[1][0]+' '+x[1][1]+' ＋ '+x[2][0]+' '+x[2][1]+'</b><br><span class="muted">金融資產 '+money(x[3])+' → '+money(x[4])+'｜智慧 '+x[5]+'｜健康 '+x[6]+(x[7]?'<br>當時理由：'+escapeHtml(x[7]):'')+'</span></div>'}g('historyList').innerHTML=out;
-for(i=0;i<S.history.length;i++){wealthPath.push(Math.round(S.history[i][4]))}
-payload={v:1,team:S.team,mode:S.mode,code:S.code,wealth:W,cash:S.cash,wisdom:S.wisdom,health:S.health,path:wealthPath};
-g('resultCode').value='INV1.'+encodeResult(payload);
-show('finalScreen')}
-g('copyResultBtn').onclick=function(){var box=g('resultCode');box.focus();box.select();var ok=false;try{ok=document.execCommand('copy')}catch(err){}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(box.value).then(function(){g('copyStatus').innerHTML='已複製！'}).catch(function(){g('copyStatus').innerHTML=ok?'已複製！':'請手動複製'})}else{g('copyStatus').innerHTML=ok?'已複製！':'請手動複製'}};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function awardData(){var W=wealth();return[
+['🤑 財富王',W>=30000,'看最終金融資產：達到 $30,000 以上'],
+['🌱 成長王',S.wisdom>=60,'看智慧資產：達到 60 分以上'],
+['❤️ 健康守門員',S.health>=80,'看健康資產：達到 80 分以上'],
+['⚖️ 理財王',W>=26000&&S.wisdom>=60&&S.health>=75&&S.cash>=5000,'綜合門檻：金融資產 ≥ $26,000、智慧 ≥ 60、健康 ≥ 75、現金 ≥ $5,000']
+]}
+function finish(){var W=wealth(),t,A=awardData(),i,out='';if(W>=30000&&S.wisdom>=60&&S.health>=75)t='🌟 均衡成長型理財家';else if(S.wisdom>=70)t='🧠 未來潛力型理財家';else if(S.health>=85&&S.cash>=6000)t='🛡️ 穩健防守型理財家';else if(W>=32000&&S.health<65)t='💸 高報酬冒險家';else t='🧭 探索中的理財家';g('endingType').innerHTML=t;g('finalWealth').innerHTML=money(W);g('finalWisdom').innerHTML=S.wisdom;g('finalHealth').innerHTML=S.health;for(i=0;i<A.length;i++){out+='<div class="award '+(A[i][1]?'won':'')+'"><b>'+A[i][0]+' '+(A[i][1]?'✅':'⬜')+'</b><small>'+A[i][2]+'</small></div>'}g('awards').innerHTML=out;out='';for(i=0;i<S.history.length;i++){var x=S.history[i];out+='<div class="hist"><b>第 '+x.round+' 輪｜'+esc(x.market)+' ＋ '+esc(x.life)+'</b><br><span class="muted">金融資產 '+money(x.before)+' → '+money(x.after)+'｜智慧 '+x.wisdom+'｜健康 '+x.health+(x.reason?'<br>當時理由：'+esc(x.reason):'')+'</span></div>'}g('historyList').innerHTML=out;show('finalScreen')}
+function csvCell(v){var s=String(v==null?'':v).replace(/"/g,'""');return '"'+s+'"'}
+g('downloadBtn').onclick=function(){var A=awardData(),rows=[['隊伍',S.team],['最終金融資產',Math.round(wealth())],['最終現金',Math.round(S.cash)],['最終智慧',S.wisdom],['最終健康',S.health],[],['輪次','市場事件','生活事件','本輪前金融資產','本輪後金融資產','智慧','健康','投保','進修','決策理由']];var i,x;for(i=0;i<S.history.length;i++){x=S.history[i];rows.push([x.round,x.market,x.life,Math.round(x.before),Math.round(x.after),x.wisdom,x.health,x.insurance?'是':'否',x.training?'是':'否',x.reason])}rows.push([]);rows.push(['獎項','是否達成','判定門檻']);for(i=0;i<A.length;i++)rows.push([A[i][0],A[i][1]?'是':'否',A[i][2]]);var csv='\uFEFF'+rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');var blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(S.team||'投資大富翁')+'_挑戰結果.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},1000)};
 g('restartBtn').onclick=function(){location.reload()};
-syncModeUI();updateTop();
+updateTop();
 })();
 </script>
 </body>
