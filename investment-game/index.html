@@ -68,11 +68,7 @@
 <section id="waitScreen" class="screen">
 <div class="card wait">
 <div class="waitIcon">🔒</div><h2>本輪決策已鎖定</h2><p id="waitText"></p>
-<div id="keyArea" class="hidden">
-<input id="revealKeyInput" maxlength="4" inputmode="numeric" placeholder="輸入老師公布的 4 位揭曉碼">
-<div id="keyError" class="error hidden">揭曉碼不正確。</div>
-<p><button type="button" id="revealBtn" class="btn">揭曉事件</button></p>
-</div>
+<button type="button" id="syncRevealBtn" class="btn hidden">👀 老師已公布，查看本輪事件</button>
 <button type="button" id="freeRevealBtn" class="btn">🎲 揭曉隨機事件</button>
 </div>
 </section>
@@ -114,7 +110,7 @@ function state(){return{mode:'free',code:'',round:1,cash:22000,fixed:0,growth:0,
 var S=state(),selectedMode='free';
 function hash(s){var x=2166136261>>>0,i;for(i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}
 function seeded(s){var x=hash(s)||123456789;x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296}
-function revealKey(r){var sum=r*997,i;for(i=0;i<S.code.length;i++){sum+=S.code.charCodeAt(i)*(i+1)}return String(1000+(sum%9000))}
+return String(1000+(sum%9000))}
 function classEvents(r){var m=M.slice(0),l=L.slice(0),me,le,i,mi,li;for(i=1;i<=r;i++){mi=Math.floor(seeded(S.code+'-M-'+i)*m.length);li=Math.floor(seeded(S.code+'-L-'+i)*l.length);me=m.splice(mi,1)[0];le=l.splice(li,1)[0]}return[me,le]}
 function pick(pool,used){var choices=[],i,idx;for(i=0;i<pool.length;i++){if(used.indexOf(i)<0)choices.push(i)}idx=choices[Math.floor(Math.random()*choices.length)];used.push(idx);return pool[idx]}
 function show(id){var screens=document.getElementsByClassName('screen'),i;for(i=0;i<screens.length;i++)screens[i].className='screen';g(id).className='screen active';window.scrollTo(0,0)}
@@ -130,8 +126,8 @@ var cBtns=document.querySelectorAll('[data-item]'),ci;
 for(ci=0;ci<cBtns.length;ci++){cBtns[ci].onclick=function(){var k=this.getAttribute('data-item'),d=parseInt(this.getAttribute('data-delta'),10);if(d>0&&spent()+d>S.cash)return;S.a[k]=Math.max(0,S.a[k]+d);updatePlay()}}
 g('insuranceBtn').onclick=function(){if(!S.insurance&&spent()+2000>S.cash)return;S.insurance=!S.insurance;updatePlay()};
 g('trainingBtn').onclick=function(){if(!S.training&&spent()+5000>S.cash)return;S.training=!S.training;updatePlay()};
-g('lockBtn').onclick=function(){var ev=(S.mode==='class')?classEvents(S.round):[pick(M,S.usedM),pick(L,S.usedL)];S.pending={ev:ev,a:{liquid:S.a.liquid,fixed:S.a.fixed,growth:S.a.growth,stable:S.a.stable},insurance:S.insurance,training:S.training,reason:g('reason').value};g('waitText').innerHTML=(S.mode==='class')?'配置已鎖定。等待老師公布本輪揭曉碼。':'配置已鎖定，準備好就揭曉隨機事件。';g('keyArea').className=(S.mode==='class')?'':'hidden';g('freeRevealBtn').className=(S.mode==='class')?'btn hidden':'btn';g('keyError').className='error hidden';g('revealKeyInput').value='';show('waitScreen')};
-g('freeRevealBtn').onclick=function(){resolveRound()};
+g('lockBtn').onclick=function(){var ev=(S.mode==='class')?classEvents(S.round):[pick(M,S.usedM),pick(L,S.usedL)];S.pending={ev:ev,a:{liquid:S.a.liquid,fixed:S.a.fixed,growth:S.a.growth,stable:S.a.stable},insurance:S.insurance,training:S.training,reason:g('reason').value};g('waitText').innerHTML=(S.mode==='class')?'配置已鎖定。請等待老師口頭宣布「可以揭曉」。':'配置已鎖定，準備好就揭曉隨機事件。';g('syncRevealBtn').className=(S.mode==='class')?'btn':'btn hidden';g('freeRevealBtn').className=(S.mode==='class')?'btn hidden':'btn';show('waitScreen')};
+g('freeRevealBtn').onclick=function(){resolveRound()};g('syncRevealBtn').onclick=function(){resolveRound()};
 g('revealBtn').onclick=function(){if(g('revealKeyInput').value.replace(/\s/g,'')!==revealKey(S.round)){g('keyError').className='error';return}resolveRound()};
 function pct(x){return(x>=0?'+':'')+Math.round(x*100)+'%'}
 function signed(n){return(n>=0?'+':'−')+money(Math.abs(n))}
