@@ -13,52 +13,88 @@
 <section id="event" class="screen"><div class="card"><span class="pill" id="eround"></span><h2>事件揭曉</h2><div id="events" class="events"></div><div class="scores"><div class="score">🏦 金融資產<div class="big" id="pwealth"></div></div><div class="score">🧠 智慧<div class="big" id="pwis"></div></div><div class="score">❤️ 健康<div class="big" id="phealth"></div></div></div><p><button class="btn" id="next">下一輪</button></p></div></section>
 <section id="final" class="screen"><div class="card"><span class="pill">五輪完成</span><h2 id="type"></h2><p id="typetext"></p><div class="scores"><div class="score">🏦 最終金融資產<div class="big" id="fwealth"></div></div><div class="score">🧠 智慧<div class="big" id="fwis"></div></div><div class="score">❤️ 健康<div class="big" id="fhealth"></div></div></div><h3>🏆 結局獎項</h3><div id="awards" class="awards"></div><h3>📜 五輪紀錄</h3><div id="history"></div><p><button class="btn" onclick="location.reload()">再玩一次</button></p></div></section>
 </main><script>
-const M=[['🚀','科技浪潮！市場大漲',.35,.10],['📈','景氣回溫',.18,.07],['😶','市場觀望',0,.02],['🏦','升息風聲',-.12,-.03],['📉','股市急跌',-.38,-.10],['🌪️','全球市場震盪',-.24,-.06],['🏘️','民生需求穩定',.03,.09],['🔄','跌深反彈',.24,.06]];
-const L=[['🚑','突發交通事故',-15000,-2000,-18,0],['🤒','流感住院',-8000,-1500,-12,0],['📦','公司縮編',-6500,-6500,-6,45],['🎉','工作表現被看見',2500,2500,2,80],['💼','接到臨時專案',1200,1200,-1,60],['🏠','家庭臨時支出',-5000,-5000,-2,0],['🌿','平安又充實的一個月',0,0,8,0],['🏅','學習成果得獎',1000,1000,3,45],['😵','工作壓力爆表',1200,1200,-10,0],['🧧','意外獎金',3500,3500,2,0]];
-const $=s=>document.querySelector(s),mon=n=>'$'+Math.round(n).toLocaleString('zh-TW');let S;
-function fresh(){return{mode:'free',code:'',round:1,cash:22000,fixed:0,growth:0,stable:0,wis:20,health:100,skills:0,ins:false,train:false,a:{liquid:0,fixed:0,growth:0,stable:0},usedM:[],usedL:[],hist:[],pending:null}}
-function h(s){let x=2166136261>>>0;for(let i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}function r01(s){let x=h(s)||123456789;x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296}function key(r){return String(1000+h(S.code+'-KEY-'+r)%9000)}
-function ce(r){let m=M.slice(),l=L.slice(),me,le;for(let i=1;i<=r;i++){me=m.splice(Math.floor(r01(S.code+'-M-'+i)*m.length),1)[0];le=l.splice(Math.floor(r01(S.code+'-L-'+i)*l.length),1)[0]}return[me,le]}
-function pick(pool,used){let a=pool.map((x,i)=>i).filter(i=>!used.includes(i)),i=a[Math.floor(Math.random()*a.length)];used.push(i);return pool[i]}
-function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));$('#'+id).classList.add('on');scrollTo(0,0)}function wealth(){return S.cash+S.fixed+S.growth+S.stable}function top(){cash.textContent=mon(S.cash);wealthEl.textContent=mon(wealth());wis.textContent=S.wis;health.textContent=S.health}
-const cash=$('#cash'),wealthEl=$('#wealth'),wis=$('#wis'),health=$('#health');
-function spent(){return S.a.liquid+S.a.fixed+S.a.growth+S.a.stable+(S.ins?2000:0)+(S.train?5000:0)}function render(){['liquid','fixed','growth','stable'].forEach(k=>$('#a'+k).textContent=mon(S.a[k]));avail.textContent=mon(S.cash-spent());ins.textContent=S.ins?'✅ 已投保 $2,000':'不投保';ins.classList.toggle('on',S.ins);train.textContent=S.train?'✅ 已進修 $5,000':'不進修';train.classList.toggle('on',S.train);income.textContent='下一輪基本收入：'+mon(6000+S.skills*2000);lock.disabled=S.cash-spent()<0;top()}
-const freeModeBtn=document.getElementById('freeModeBtn');
-const classModeBtn=document.getElementById('classModeBtn');
-const codeboxEl=document.getElementById('codebox');
-const classcodeEl=document.getElementById('classcode');
-const codeerrEl=document.getElementById('codeerr');
-const startbtnEl=document.getElementById('startbtn');
-const roundEl=document.getElementById('round');
-const modelabelEl=document.getElementById('modelabel');
-let selectedMode='free';
-function setMode(mode){
-  selectedMode=mode;
-  const isClass=mode==='class';
-  freeModeBtn.classList.toggle('on',!isClass);
-  classModeBtn.classList.toggle('on',isClass);
-  codeboxEl.classList.toggle('hidden',!isClass);
-  if(isClass){setTimeout(()=>classcodeEl.focus(),0)}
-}
-freeModeBtn.addEventListener('click',()=>setMode('free'));
-classModeBtn.addEventListener('click',()=>setMode('class'));
-startbtnEl.addEventListener('click',()=>{
-  S=fresh();
-  S.mode=selectedMode;
-  S.code=classcodeEl.value.trim().toUpperCase();
-  if(S.mode==='class'&&!S.code){codeerrEl.classList.remove('hidden');classcodeEl.focus();return}
-  codeerrEl.classList.add('hidden');
-  show('play');
-  roundEl.textContent='第 1 / 5 輪';
-  modelabelEl.textContent=S.mode==='class'?'🏫 課堂同步｜'+S.code:'🎲 自由挑戰';
-  render()
+document.addEventListener('DOMContentLoaded', function () {
+  const M=[['🚀','科技浪潮！市場大漲',.35,.10],['📈','景氣回溫',.18,.07],['😶','市場觀望',0,.02],['🏦','升息風聲',-.12,-.03],['📉','股市急跌',-.38,-.10],['🌪️','全球市場震盪',-.24,-.06],['🏘️','民生需求穩定',.03,.09],['🔄','跌深反彈',.24,.06]];
+  const L=[['🚑','突發交通事故',-15000,-2000,-18,0],['🤒','流感住院',-8000,-1500,-12,0],['📦','公司縮編',-6500,-6500,-6,45],['🎉','工作表現被看見',2500,2500,2,80],['💼','接到臨時專案',1200,1200,-1,60],['🏠','家庭臨時支出',-5000,-5000,-2,0],['🌿','平安又充實的一個月',0,0,8,0],['🏅','學習成果得獎',1000,1000,3,45],['😵','工作壓力爆表',1200,1200,-10,0],['🧧','意外獎金',3500,3500,2,0]];
+  const el=id=>document.getElementById(id);
+  const money=n=>'</body></html>+Math.round(n).toLocaleString('zh-TW');
+  const E={cash:el('cash'),wealth:el('wealth'),wis:el('wis'),health:el('health'),freeModeBtn:el('freeModeBtn'),classModeBtn:el('classModeBtn'),codebox:el('codebox'),classcode:el('classcode'),codeerr:el('codeerr'),startbtn:el('startbtn'),round:el('round'),modelabel:el('modelabel'),avail:el('avail'),ins:el('ins'),train:el('train'),income:el('income'),lock:el('lock'),reason:el('reason'),waittext:el('waittext'),keybox:el('keybox'),keyInput:el('key'),keyerr:el('keyerr'),reveal:el('reveal'),freereveal:el('freereveal'),events:el('events'),eround:el('eround'),pwealth:el('pwealth'),pwis:el('pwis'),phealth:el('phealth'),next:el('next'),type:el('type'),typetext:el('typetext'),fwealth:el('fwealth'),fwis:el('fwis'),fhealth:el('fhealth'),awards:el('awards'),history:el('history')};
+  let S=null, selectedMode='free';
+  function fresh(){return{mode:'free',code:'',round:1,cash:22000,fixed:0,growth:0,stable:0,wis:20,health:100,skills:0,ins:false,train:false,a:{liquid:0,fixed:0,growth:0,stable:0},usedM:[],usedL:[],hist:[],pending:null}}
+  function hash(s){let x=2166136261>>>0;for(let i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}
+  function rand01(s){let x=hash(s)||123456789;x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296}
+  function revealKey(roundNo){return String(1000+hash(S.code+'-KEY-'+roundNo)%9000)}
+  function classEvents(roundNo){let m=M.slice(),l=L.slice(),me,le;for(let i=1;i<=roundNo;i++){me=m.splice(Math.floor(rand01(S.code+'-M-'+i)*m.length),1)[0];le=l.splice(Math.floor(rand01(S.code+'-L-'+i)*l.length),1)[0]}return[me,le]}
+  function pick(pool,used){const candidates=pool.map((_,i)=>i).filter(i=>!used.includes(i));const idx=candidates[Math.floor(Math.random()*candidates.length)];used.push(idx);return pool[idx]}
+  function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));el(id).classList.add('on');window.scrollTo(0,0)}
+  function totalWealth(){return S.cash+S.fixed+S.growth+S.stable}
+  function top(){E.cash.textContent=money(S.cash);E.wealth.textContent=money(totalWealth());E.wis.textContent=S.wis;E.health.textContent=S.health}
+  function spent(){return S.a.liquid+S.a.fixed+S.a.growth+S.a.stable+(S.ins?2000:0)+(S.train?5000:0)}
+  function render(){
+    ['liquid','fixed','growth','stable'].forEach(k=>el('a'+k).textContent=money(S.a[k]));
+    E.avail.textContent=money(S.cash-spent());
+    E.ins.textContent=S.ins?'✅ 已投保 $2,000':'不投保'; E.ins.classList.toggle('on',S.ins);
+    E.train.textContent=S.train?'✅ 已進修 $5,000':'不進修'; E.train.classList.toggle('on',S.train);
+    E.income.textContent='下一輪基本收入：'+money(6000+S.skills*2000);
+    E.lock.disabled=S.cash-spent()<0; top();
+  }
+  function setMode(mode){
+    selectedMode=mode; const isClass=mode==='class';
+    E.freeModeBtn.classList.toggle('on',!isClass);
+    E.classModeBtn.classList.toggle('on',isClass);
+    E.codebox.classList.toggle('hidden',!isClass);
+    if(isClass) setTimeout(()=>E.classcode.focus(),0);
+  }
+  E.freeModeBtn.addEventListener('click',()=>setMode('free'));
+  E.classModeBtn.addEventListener('click',()=>setMode('class'));
+  E.startbtn.addEventListener('click',()=>{
+    S=fresh(); S.mode=selectedMode; S.code=E.classcode.value.trim().toUpperCase();
+    if(S.mode==='class'&&!S.code){E.codeerr.classList.remove('hidden');E.classcode.focus();return}
+    E.codeerr.classList.add('hidden'); show('play'); E.round.textContent='第 1 / 5 輪';
+    E.modelabel.textContent=S.mode==='class'?'🏫 課堂同步｜'+S.code:'🎲 自由挑戰'; render();
+  });
+  document.querySelectorAll('.ctr button').forEach(btn=>btn.addEventListener('click',()=>{
+    const k=btn.dataset.k,d=Number(btn.dataset.d); if(d>0&&spent()+d>S.cash)return; S.a[k]=Math.max(0,S.a[k]+d); render();
+  }));
+  E.ins.addEventListener('click',()=>{if(!S.ins&&spent()+2000>S.cash)return;S.ins=!S.ins;render()});
+  E.train.addEventListener('click',()=>{if(!S.train&&spent()+5000>S.cash)return;S.train=!S.train;render()});
+  E.lock.addEventListener('click',()=>{
+    const ev=S.mode==='class'?classEvents(S.round):[pick(M,S.usedM),pick(L,S.usedL)];
+    S.pending={ev,a:{...S.a},ins:S.ins,train:S.train,reason:E.reason.value};
+    E.waittext.textContent=S.mode==='class'?'配置已鎖定。等待老師公布本輪揭曉碼。':'配置已鎖定，準備好就揭曉隨機事件。';
+    E.keybox.classList.toggle('hidden',S.mode!=='class'); E.freereveal.classList.toggle('hidden',S.mode==='class');
+    E.keyerr.classList.add('hidden'); E.keyInput.value=''; show('wait');
+  });
+  E.freereveal.addEventListener('click',resolve);
+  E.reveal.addEventListener('click',()=>{if(E.keyInput.value.trim()!==revealKey(S.round)){E.keyerr.classList.remove('hidden');return}resolve()});
+  function pct(x){return(x>=0?'+':'')+Math.round(x*100)+'%'}
+  function signedMoney(x){return(x>=0?'+':'−')+money(Math.abs(x))}
+  function resolve(){
+    const p=S.pending,m=p.ev[0],l=p.ev[1],cost=p.a.liquid+p.a.fixed+p.a.growth+p.a.stable+(p.ins?2000:0)+(p.train?5000:0),before=totalWealth();
+    S.cash=S.cash-cost+p.a.liquid; S.fixed+=p.a.fixed; S.growth+=p.a.growth; S.stable+=p.a.stable;
+    if(p.train)S.wis=Math.min(100,S.wis+20);
+    S.cash+=Math.round(S.cash*.005); S.fixed+=Math.round(S.fixed*.02);
+    S.growth=Math.max(0,S.growth+Math.round(S.growth*m[2])); S.stable=Math.max(0,S.stable+Math.round(S.stable*m[3]));
+    let lm=p.ins?l[3]:l[2]; if(l[5])lm+=Math.round(S.wis*l[5]/100); S.cash+=lm; S.health=Math.max(0,Math.min(100,S.health+l[4])); if(p.train)S.skills++;
+    S.hist.push([S.round,m,l,before,totalWealth(),S.wis,S.health,p.reason]);
+    E.events.innerHTML='<div class="event"><h3>'+m[0]+' '+m[1]+'</h3><p>🚀 成長股 '+pct(m[2])+'<br>🏠 穩健股 '+pct(m[3])+'</p></div><div class="event"><h3>'+l[0]+' '+l[1]+'</h3><p>💰 金錢影響 '+signedMoney(lm)+'<br>❤️ 健康影響 '+(l[4]>=0?'+':'')+l[4]+(p.ins&&(l[0]==='🚑'||l[0]==='🤒')?'<br>🛡️ 保險已降低醫療支出':'')+'</p></div>';
+    E.eround.textContent='第 '+S.round+' 輪'; E.pwealth.textContent=money(totalWealth()); E.pwis.textContent=S.wis; E.phealth.textContent=S.health;
+    E.next.textContent=S.round===5?'查看最終結局':'進入下一輪'; top(); show('event');
+  }
+  E.next.addEventListener('click',()=>{
+    if(S.round===5){finish();return}
+    S.round++; S.cash+=6000+S.skills*2000; S.a={liquid:0,fixed:0,growth:0,stable:0}; S.ins=false; S.train=false; E.reason.value='';
+    E.round.textContent='第 '+S.round+' / 5 輪'; render(); show('play');
+  });
+  function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+  function finish(){
+    const W=totalWealth(),t=W>=30000&&S.wis>=60&&S.health>=75?'🌟 均衡成長型理財家':S.wis>=70?'🧠 未來潛力型理財家':S.health>=85&&S.cash>=6000?'🛡️ 穩健防守型理財家':W>=32000&&S.health<65?'💸 高報酬冒險家':'🧭 探索中的理財家';
+    E.type.textContent=t; E.typetext.textContent='想一想：哪些結果來自選擇？哪些來自運氣？'; E.fwealth.textContent=money(W); E.fwis.textContent=S.wis; E.fhealth.textContent=S.health;
+    const A=[['🤑 財富王',W>=30000],['🌱 成長王',S.wis>=60],['❤️ 健康守門員',S.health>=80],['⚖️ 理財王',W>=26000&&S.wis>=60&&S.health>=75&&S.cash>=5000]];
+    E.awards.innerHTML=A.map(x=>'<div class="award '+(x[1]?'won':'')+'"><b>'+x[0]+' '+(x[1]?'✅':'⬜')+'</b></div>').join('');
+    E.history.innerHTML=S.hist.map(x=>'<div class="hist"><b>第 '+x[0]+' 輪｜'+x[1][0]+' '+x[1][1]+' ＋ '+x[2][0]+' '+x[2][1]+'</b><br><span class="muted">金融資產 '+money(x[3])+' → '+money(x[4])+'｜智慧 '+x[5]+'｜健康 '+x[6]+(x[7]?'<br>當時理由：'+esc(x[7]):'')+'</span></div>').join('');
+    show('final');
+  }
+  S=fresh(); top(); setMode('free');
 });
-document.querySelectorAll('.ctr button').forEach(b=>b.onclick=()=>{let k=b.dataset.k,d=+b.dataset.d;if(d>0&&spent()+d>S.cash)return;S.a[k]=Math.max(0,S.a[k]+d);render()});ins.onclick=()=>{if(!S.ins&&spent()+2000>S.cash)return;S.ins=!S.ins;render()};train.onclick=()=>{if(!S.train&&spent()+5000>S.cash)return;S.train=!S.train;render()};
-lock.onclick=()=>{let ev=S.mode==='class'?ce(S.round):[pick(M,S.usedM),pick(L,S.usedL)];S.pending={ev:ev,a:{...S.a},ins:S.ins,train:S.train,reason:reason.value};waittext.textContent=S.mode==='class'?'配置已鎖定。等待老師公布本輪揭曉碼。':'配置已鎖定，準備好就揭曉隨機事件。';keybox.classList.toggle('hidden',S.mode!=='class');freereveal.classList.toggle('hidden',S.mode==='class');keyerr.classList.add('hidden');key.value='';show('wait')};
-freereveal.onclick=resolve;reveal.onclick=()=>{if(key.value.trim()!==keyCode()){keyerr.classList.remove('hidden');return}resolve()};function keyCode(){return key(S.round)}
-function resolve(){let p=S.pending,m=p.ev[0],l=p.ev[1],cost=p.a.liquid+p.a.fixed+p.a.growth+p.a.stable+(p.ins?2000:0)+(p.train?5000:0),before=wealth();S.cash=S.cash-cost+p.a.liquid;S.fixed+=p.a.fixed;S.growth+=p.a.growth;S.stable+=p.a.stable;if(p.train){S.wis=Math.min(100,S.wis+20)}let interest=Math.round(S.cash*.005)+Math.round(S.fixed*.02);S.cash+=Math.round(S.cash*.005);S.fixed+=Math.round(S.fixed*.02);let gd=Math.round(S.growth*m[2]),sd=Math.round(S.stable*m[3]);S.growth=Math.max(0,S.growth+gd);S.stable=Math.max(0,S.stable+sd);let lm=p.ins?l[3]:l[2];if(l[5])lm+=Math.round(S.wis*l[5]/100);S.cash+=lm;S.health=Math.max(0,Math.min(100,S.health+l[4]));if(p.train)S.skills++;S.hist.push([S.round,m,l,before,wealth(),S.wis,S.health,p.reason]);events.innerHTML='<div class="event"><h3>'+m[0]+' '+m[1]+'</h3><p>🚀 成長股 '+pct(m[2])+'<br>🏠 穩健股 '+pct(m[3])+'</p></div><div class="event"><h3>'+l[0]+' '+l[1]+'</h3><p>💰 金錢影響 '+sm(lm)+'<br>❤️ 健康影響 '+(l[4]>=0?'+':'')+l[4]+(p.ins&&(l[0]==='🚑'||l[0]==='🤒')?'<br>🛡️ 保險已降低醫療支出':'')+'</p></div>';eround.textContent='第 '+S.round+' 輪';pwealth.textContent=mon(wealth());pwis.textContent=S.wis;phealth.textContent=S.health;next.textContent=S.round===5?'查看最終結局':'進入下一輪';top();show('event')}
-function pct(x){return(x>=0?'+':'')+Math.round(x*100)+'%'}function sm(x){return(x>=0?'+':'−')+mon(Math.abs(x))}
-next.onclick=()=>{if(S.round===5)return finish();S.round++;S.cash+=6000+S.skills*2000;S.a={liquid:0,fixed:0,growth:0,stable:0};S.ins=false;S.train=false;reason.value='';round.textContent='第 '+S.round+' / 5 輪';render();show('play')};
-function finish(){let W=wealth(),t=W>=30000&&S.wis>=60&&S.health>=75?'🌟 均衡成長型理財家':S.wis>=70?'🧠 未來潛力型理財家':S.health>=85&&S.cash>=6000?'🛡️ 穩健防守型理財家':W>=32000&&S.health<65?'💸 高報酬冒險家':'🧭 探索中的理財家';type.textContent=t;typetext.textContent='想一想：哪些結果來自選擇？哪些來自運氣？';fwealth.textContent=mon(W);fwis.textContent=S.wis;fhealth.textContent=S.health;let A=[['🤑 財富王',W>=30000],['🌱 成長王',S.wis>=60],['❤️ 健康守門員',S.health>=80],['⚖️ 理財王',W>=26000&&S.wis>=60&&S.health>=75&&S.cash>=5000]];awards.innerHTML=A.map(x=>'<div class="award '+(x[1]?'won':'')+'"><b>'+x[0]+' '+(x[1]?'✅':'⬜')+'</b></div>').join('');history.innerHTML=S.hist.map(x=>'<div class="hist"><b>第 '+x[0]+' 輪｜'+x[1][0]+' '+x[1][1]+' ＋ '+x[2][0]+' '+x[2][1]+'</b><br><span class="muted">金融資產 '+mon(x[3])+' → '+mon(x[4])+'｜智慧 '+x[5]+'｜健康 '+x[6]+(x[7]?'<br>當時理由：'+esc(x[7]):'')+'</span></div>').join('');show('final')}function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-S=fresh();top();
 </script></body></html>
