@@ -6,15 +6,7 @@
 <title>教師端｜投資大富翁</title>
 <style>
 body{margin:0;font-family:Arial,"Noto Sans TC",sans-serif;background:#f4f1fb;color:#182033}
-.w{max-width:900px;margin:auto;padding:22px}
-.hero,.card{background:#fff;border:1px solid #e4e5e9;border-radius:20px;padding:20px;margin-bottom:15px}
-.hero{background:#59449c;color:#fff}
-.code{font-size:40px;font-weight:900;letter-spacing:.14em;text-align:center;border:2px dashed #a99bd4;border-radius:15px;padding:15px;background:#faf8ff}
-.btn{border:0;border-radius:11px;padding:11px 15px;background:#6750a4;color:#fff;font-weight:900;cursor:pointer;font-size:16px}
-.r{display:grid;grid-template-columns:75px 1fr;gap:10px;padding:12px;border-bottom:1px solid #eee}
-.warn{background:#fff8e7;border-left:4px solid #dfb746;padding:12px}
-.muted{color:#667085}
-@media(max-width:650px){.r{grid-template-columns:1fr}}
+.w{max-width:1100px;margin:auto;padding:22px}.hero,.card{background:#fff;border:1px solid #e4e5e9;border-radius:20px;padding:20px;margin-bottom:15px}.hero{background:#59449c;color:#fff}.code{font-size:40px;font-weight:900;letter-spacing:.14em;text-align:center;border:2px dashed #a99bd4;border-radius:15px;padding:15px;background:#faf8ff}.btn{border:0;border-radius:11px;padding:11px 15px;background:#6750a4;color:#fff;font-weight:900;cursor:pointer;font-size:16px}.btn.secondary{background:#eef0f5;color:#293240}.r{display:grid;grid-template-columns:75px 1fr;gap:10px;padding:12px;border-bottom:1px solid #eee}.warn{background:#fff8e7;border-left:4px solid #dfb746;padding:12px}.muted{color:#667085}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #e8e8ec;padding:10px;text-align:left;white-space:nowrap}th{background:#f7f6fb}.badge{display:inline-block;border-radius:999px;padding:4px 8px;background:#eee9ff;margin:2px;font-size:13px}.chartBox{height:360px;border:1px solid #e5e5ea;border-radius:14px;padding:10px;background:#fff}.chartBox canvas{width:100%;height:100%}.empty{padding:24px;text-align:center;color:#667085}textarea{width:100%;padding:10px;border:1px solid #ccd1da;border-radius:10px;font:inherit}.small{font-size:13px;color:#667085}@media(max-width:760px){.r,.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -22,19 +14,50 @@ body{margin:0;font-family:Arial,"Noto Sans TC",sans-serif;background:#f4f1fb;col
 <section class="hero">
 <b>獨立教師頁面・學生端沒有入口</b>
 <h1>🧑‍🏫 投資大富翁教師端</h1>
-<p>產生課堂代碼後，全班輸入同一代碼。每輪先鎖定選擇，再由你口頭宣布「可以揭曉」。</p>
+<p>上課時先產生課堂代碼；五輪結束後，把各組「結果碼」貼進下方，就能自動產生全班比較。</p>
 </section>
 
+<div class="grid2">
 <section class="card">
 <h2>課堂代碼</h2>
 <div id="code" class="code">------</div>
 <p><button id="newCodeBtn" class="btn" type="button">🎲 產生新代碼</button></p>
+<p class="small">全班輸入同一組代碼，就會遇到相同的五輪事件。</p>
 </section>
 
 <section class="card">
 <h2>五輪事件</h2>
 <p class="warn">確認各組都已顯示「本輪決策已鎖定」後，再口頭宣布「可以揭曉」。</p>
 <div id="rounds"></div>
+</section>
+</div>
+
+<section class="card">
+<h2>📥 匯入各組結果</h2>
+<p>每組五輪結束後，在學生端按「複製結果碼」。把結果碼貼在下面；一次可貼多組，每組一行。</p>
+<textarea id="importBox" rows="6" placeholder="INV1.……"></textarea>
+<p><button id="importBtn" class="btn" type="button">匯入結果</button> <button id="clearBtn" class="btn secondary" type="button">清空全班結果</button></p>
+<div id="importMsg" class="small"></div>
+</section>
+
+<section class="card">
+<h2>📈 全班五輪金融資產變化</h2>
+<div class="chartBox"><canvas id="lineChart" width="1000" height="340"></canvas></div>
+<p class="small">每一條線代表一組；第 1～5 輪的金融資產變化會直接畫在同一張圖上。</p>
+</section>
+
+<section class="card">
+<h2>📊 最終三項指標比較</h2>
+<div class="grid2">
+<div class="chartBox"><canvas id="wealthChart" width="500" height="340"></canvas></div>
+<div class="chartBox"><canvas id="scoreChart" width="500" height="340"></canvas></div>
+</div>
+<p class="small">左：最終金融資產。右：智慧與健康分數。</p>
+</section>
+
+<section class="card">
+<h2>🏆 全班結果表</h2>
+<div id="resultTable" class="tableWrap"></div>
 </section>
 
 <section class="card">
@@ -48,61 +71,33 @@ body{margin:0;font-family:Arial,"Noto Sans TC",sans-serif;background:#f4f1fb;col
 (function(){
 var M=[['🚀','科技浪潮！市場大漲'],['📈','景氣回溫'],['😶','市場觀望'],['🏦','升息風聲'],['📉','股市急跌'],['🌪️','全球市場震盪'],['🏘️','民生需求穩定'],['🔄','跌深反彈']];
 var L=[['🚑','突發交通事故'],['🤒','流感住院'],['📦','公司縮編'],['🎉','工作表現被看見'],['💼','接到臨時專案'],['🏠','家庭臨時支出'],['🌿','平安又充實的一個月'],['🏅','學習成果得獎'],['😵','工作壓力爆表'],['🧧','意外獎金']];
+var results=[];
 
-function h(s){
-  var x=2166136261>>>0,i;
-  for(i=0;i<s.length;i++){
-    x^=s.charCodeAt(i);
-    x=Math.imul(x,16777619);
-  }
-  return x>>>0;
-}
-function r(s){
-  var x=h(s)||123456789;
-  x^=x<<13;
-  x^=x>>>17;
-  x^=x<<5;
-  return (x>>>0)/4294967296;
-}
-function eventsFor(code,n){
-  var m=M.slice(0),l=L.slice(0),a,b,i;
-  for(i=1;i<=n;i++){
-    a=m.splice(Math.floor(r(code+'-M-'+i)*m.length),1)[0];
-    b=l.splice(Math.floor(r(code+'-L-'+i)*l.length),1)[0];
-  }
-  return [a,b];
-}
-function makeCode(){
-  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var out='',i;
-  if(window.crypto&&window.crypto.getRandomValues){
-    var x=new Uint32Array(6);
-    window.crypto.getRandomValues(x);
-    for(i=0;i<6;i++) out+=chars.charAt(x[i]%chars.length);
-  }else{
-    for(i=0;i<6;i++) out+=chars.charAt(Math.floor(Math.random()*chars.length));
-  }
-  return out;
-}
-function draw(code){
-  document.getElementById('code').innerHTML=code;
-  var html='',i,e;
-  for(i=1;i<=5;i++){
-    e=eventsFor(code,i);
-    html+='<div class="r"><b>第 '+i+' 輪</b><span>'+e[0][0]+' '+e[0][1]+' ＋ '+e[1][0]+' '+e[1][1]+'</span></div>';
-  }
-  document.getElementById('rounds').innerHTML=html;
-}
-function setNewCode(){
-  var code=makeCode();
-  try{localStorage.setItem('invCode',code)}catch(err){}
-  draw(code);
-}
+function h(s){var x=2166136261>>>0,i;for(i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return x>>>0}
+function r(s){var x=h(s)||123456789;x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296}
+function eventsFor(code,n){var m=M.slice(0),l=L.slice(0),a,b,i;for(i=1;i<=n;i++){a=m.splice(Math.floor(r(code+'-M-'+i)*m.length),1)[0];b=l.splice(Math.floor(r(code+'-L-'+i)*l.length),1)[0]}return[a,b]}
+function makeCode(){var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',out='',i;if(window.crypto&&window.crypto.getRandomValues){var x=new Uint32Array(6);window.crypto.getRandomValues(x);for(i=0;i<6;i++)out+=chars.charAt(x[i]%chars.length)}else{for(i=0;i<6;i++)out+=chars.charAt(Math.floor(Math.random()*chars.length))}return out}
+function drawCode(code){document.getElementById('code').innerHTML=code;var html='',i,e;for(i=1;i<=5;i++){e=eventsFor(code,i);html+='<div class="r"><b>第 '+i+' 輪</b><span>'+e[0][0]+' '+e[0][1]+' ＋ '+e[1][0]+' '+e[1][1]+'</span></div>'}document.getElementById('rounds').innerHTML=html}
+function setNewCode(){var code=makeCode();try{localStorage.setItem('invCode',code)}catch(err){}drawCode(code)}
+function decodeResult(line){if(line.indexOf('INV1.')!==0)throw new Error('格式錯誤');var raw=line.substring(5);try{return JSON.parse(decodeURIComponent(escape(atob(raw))))}catch(err){return JSON.parse(decodeURIComponent(raw))}}
+function saveResults(){try{localStorage.setItem('invResults',JSON.stringify(results))}catch(err){}}
+function loadResults(){try{var x=localStorage.getItem('invResults');if(x)results=JSON.parse(x)}catch(err){results=[]}}
+function money(n){return '$'+Math.round(n).toLocaleString()}
+function awards(x){var a=[];if(x.wealth>=30000)a.push('🤑財富王');if(x.wisdom>=60)a.push('🌱成長王');if(x.health>=80)a.push('❤️健康守門員');if(x.wealth>=26000&&x.wisdom>=60&&x.health>=75&&x.cash>=5000)a.push('⚖️理財王');return a}
+function importCodes(){var lines=document.getElementById('importBox').value.split(/\n+/),ok=0,bad=0,i,obj;for(i=0;i<lines.length;i++){var line=lines[i].replace(/^\s+|\s+$/g,'');if(!line)continue;try{obj=decodeResult(line);if(!obj.team||!obj.path||obj.path.length!==5)throw new Error('資料不完整');var replaced=false,j;for(j=0;j<results.length;j++){if(results[j].team===obj.team){results[j]=obj;replaced=true;break}}if(!replaced)results.push(obj);ok++}catch(err){bad++}}saveResults();document.getElementById('importMsg').innerHTML='成功匯入 '+ok+' 組'+(bad?'，另有 '+bad+' 組格式無法讀取。':'。');document.getElementById('importBox').value='';renderAll()}
+function clearResults(){if(!confirm('確定要清空全部班級結果嗎？'))return;results=[];saveResults();renderAll()}
+function renderTable(){var box=document.getElementById('resultTable');if(!results.length){box.innerHTML='<div class="empty">尚未匯入任何小組結果。</div>';return}var html='<table><thead><tr><th>小組</th><th>金融資產</th><th>現金</th><th>智慧</th><th>健康</th><th>獎項</th></tr></thead><tbody>',i,a;for(i=0;i<results.length;i++){a=awards(results[i]);html+='<tr><td><b>'+escapeHtml(results[i].team)+'</b></td><td>'+money(results[i].wealth)+'</td><td>'+money(results[i].cash)+'</td><td>'+results[i].wisdom+'</td><td>'+results[i].health+'</td><td>'+(a.length?a.map(function(v){return'<span class="badge">'+v+'</span>'}).join(''):'—')+'</td></tr>'}html+='</tbody></table>';box.innerHTML=html}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function setupCanvas(id){var c=document.getElementById(id),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);return{c:c,ctx:ctx}}
+function axes(ctx,w,h,left,bottom,title){ctx.fillStyle='#182033';ctx.font='16px Arial';ctx.fillText(title,20,24);ctx.strokeStyle='#bfc4ce';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,40);ctx.lineTo(left,h-bottom);ctx.lineTo(w-20,h-bottom);ctx.stroke()}
+function drawLine(){var o=setupCanvas('lineChart'),ctx=o.ctx,w=o.c.width,h=o.c.height,left=70,bottom=45,i,j,max=30000,min=0;if(results.length){max=0;for(i=0;i<results.length;i++){for(j=0;j<results[i].path.length;j++){if(results[i].path[j]>max)max=results[i].path[j]}}max=Math.max(30000,Math.ceil(max/5000)*5000)}axes(ctx,w,h,left,bottom,'五輪金融資產');ctx.font='13px Arial';ctx.fillStyle='#4d5564';for(j=0;j<5;j++){var x=left+(w-left-30)*j/4;ctx.fillText('第'+(j+1)+'輪',x-16,h-18)}if(!results.length){ctx.fillText('尚未匯入資料',w/2-45,h/2);return}var palette=['#6750a4','#2f897b','#c35f3c','#3378b5','#b78b21','#a14d74','#587b3b','#7a5c44'];for(i=0;i<results.length;i++){ctx.strokeStyle=palette[i%palette.length];ctx.fillStyle=palette[i%palette.length];ctx.lineWidth=3;ctx.beginPath();for(j=0;j<5;j++){var px=left+(w-left-30)*j/4,py=(h-bottom)-((results[i].path[j]-min)/(max-min))*(h-bottom-60);if(j===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();ctx.fillText(results[i].team,w-170,50+i*18)}}
+function drawBars(id,key,title,scoreMax){var o=setupCanvas(id),ctx=o.ctx,w=o.c.width,h=o.c.height,left=65,bottom=55,i,max=scoreMax||1;if(!scoreMax){for(i=0;i<results.length;i++)if(results[i][key]>max)max=results[i][key];max=Math.max(30000,Math.ceil(max/5000)*5000)}axes(ctx,w,h,left,bottom,title);if(!results.length){ctx.fillStyle='#4d5564';ctx.fillText('尚未匯入資料',w/2-45,h/2);return}var bw=(w-left-30)/results.length*0.6;for(i=0;i<results.length;i++){var gap=(w-left-30)/results.length,x=left+i*gap+gap*0.2,val=results[i][key],bh=(val/max)*(h-bottom-65);ctx.fillStyle='#6750a4';ctx.fillRect(x,h-bottom-bh,bw,bh);ctx.fillStyle='#182033';ctx.font='12px Arial';ctx.fillText(results[i].team.substring(0,7),x,h-24);ctx.fillText(scoreMax?String(val):money(val),x,h-bottom-bh-5)}}
+function drawScores(){var o=setupCanvas('scoreChart'),ctx=o.ctx,w=o.c.width,h=o.c.height,left=55,bottom=55,i;if(!results.length){axes(ctx,w,h,left,bottom,'智慧／健康');ctx.fillStyle='#4d5564';ctx.fillText('尚未匯入資料',w/2-45,h/2);return}axes(ctx,w,h,left,bottom,'智慧／健康');var group=(w-left-30)/results.length,bw=group*0.26;for(i=0;i<results.length;i++){var x=left+i*group+group*0.18,wh=(results[i].wisdom/100)*(h-bottom-65),hh=(results[i].health/100)*(h-bottom-65);ctx.fillStyle='#6750a4';ctx.fillRect(x,h-bottom-wh,bw,wh);ctx.fillStyle='#2f897b';ctx.fillRect(x+bw+4,h-bottom-hh,bw,hh);ctx.fillStyle='#182033';ctx.font='12px Arial';ctx.fillText(results[i].team.substring(0,7),x,h-24)}ctx.fillStyle='#6750a4';ctx.fillRect(w-150,18,12,12);ctx.fillStyle='#182033';ctx.fillText('智慧',w-132,29);ctx.fillStyle='#2f897b';ctx.fillRect(w-85,18,12,12);ctx.fillStyle='#182033';ctx.fillText('健康',w-67,29)}
+function renderAll(){renderTable();drawLine();drawBars('wealthChart','wealth','最終金融資產');drawScores()}
 document.getElementById('newCodeBtn').onclick=setNewCode;
-var initial='';
-try{initial=localStorage.getItem('invCode')||''}catch(err){}
-if(!initial) initial=makeCode();
-draw(initial);
+document.getElementById('importBtn').onclick=importCodes;
+document.getElementById('clearBtn').onclick=clearResults;
+var initial='';try{initial=localStorage.getItem('invCode')||''}catch(err){}if(!initial)initial=makeCode();drawCode(initial);loadResults();renderAll();
 })();
 </script>
 </body>
