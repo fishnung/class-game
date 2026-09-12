@@ -88,8 +88,8 @@
 <h3>🏆 結局獎項</h3><div id="awards" class="awards"></div>
 <div class="downloadBox">
 <h3>📥 下載挑戰結果</h3>
-<p class="muted">下載後會得到 CSV 檔，包含五輪事件、資產變化、最後指標與獎項。</p>
-<button type="button" id="downloadBtn" class="btn">下載結果 CSV</button>
+<p class="muted">按一下就會下載一張完整 PNG 結果圖，包含結局、獎項門檻、五輪歷程與分析圖表。</p>
+<button type="button" id="downloadBtn" class="btn">📥 下載結果圖 PNG</button>
 </div>
 <h3>📜 五輪紀錄</h3><div id="historyList"></div>
 <p><button type="button" id="restartBtn" class="btn secondary">再玩一次</button></p>
@@ -129,8 +129,156 @@ function awardData(){var W=wealth();return[
 ['⚖️ 理財王',W>=26000&&S.wisdom>=60&&S.health>=75&&S.cash>=5000,'綜合門檻：金融資產 ≥ $26,000、智慧 ≥ 60、健康 ≥ 75、現金 ≥ $5,000']
 ]}
 function finish(){var W=wealth(),t,A=awardData(),i,out='';if(W>=30000&&S.wisdom>=60&&S.health>=75)t='🌟 均衡成長型理財家';else if(S.wisdom>=70)t='🧠 未來潛力型理財家';else if(S.health>=85&&S.cash>=6000)t='🛡️ 穩健防守型理財家';else if(W>=32000&&S.health<65)t='💸 高報酬冒險家';else t='🧭 探索中的理財家';g('endingType').innerHTML=t;g('finalWealth').innerHTML=money(W);g('finalWisdom').innerHTML=S.wisdom;g('finalHealth').innerHTML=S.health;for(i=0;i<A.length;i++){out+='<div class="award '+(A[i][1]?'won':'')+'"><b>'+A[i][0]+' '+(A[i][1]?'✅':'⬜')+'</b><small>'+A[i][2]+'</small></div>'}g('awards').innerHTML=out;out='';for(i=0;i<S.history.length;i++){var x=S.history[i];out+='<div class="hist"><b>第 '+x.round+' 輪｜'+esc(x.market)+' ＋ '+esc(x.life)+'</b><br><span class="muted">金融資產 '+money(x.before)+' → '+money(x.after)+'｜智慧 '+x.wisdom+'｜健康 '+x.health+(x.reason?'<br>當時理由：'+esc(x.reason):'')+'</span></div>'}g('historyList').innerHTML=out;show('finalScreen')}
-function csvCell(v){var s=String(v==null?'':v).replace(/"/g,'""');return '"'+s+'"'}
-g('downloadBtn').onclick=function(){var A=awardData(),rows=[['隊伍',S.team],['最終金融資產',Math.round(wealth())],['最終現金',Math.round(S.cash)],['最終智慧',S.wisdom],['最終健康',S.health],[],['輪次','市場事件','生活事件','本輪前金融資產','本輪後金融資產','智慧','健康','投保','進修','決策理由']];var i,x;for(i=0;i<S.history.length;i++){x=S.history[i];rows.push([x.round,x.market,x.life,Math.round(x.before),Math.round(x.after),x.wisdom,x.health,x.insurance?'是':'否',x.training?'是':'否',x.reason])}rows.push([]);rows.push(['獎項','是否達成','判定門檻']);for(i=0;i<A.length;i++)rows.push([A[i][0],A[i][1]?'是':'否',A[i][2]]);var csv='\uFEFF'+rows.map(function(r){return r.map(csvCell).join(',')}).join('\r\n');var blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(S.team||'投資大富翁')+'_挑戰結果.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},1000)};
+
+function drawRoundedRect(ctx,x,y,w,h,r,fill,stroke){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  if(fill){ctx.fillStyle=fill;ctx.fill()}
+  if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}
+}
+function wrapText(ctx,text,x,y,maxWidth,lineHeight,maxLines){
+  var chars=String(text||'').split(''),line='',lines=[],i,test;
+  for(i=0;i<chars.length;i++){
+    test=line+chars[i];
+    if(ctx.measureText(test).width>maxWidth&&line){
+      lines.push(line);line=chars[i];
+      if(maxLines&&lines.length>=maxLines)break;
+    }else line=test;
+  }
+  if((!maxLines||lines.length<maxLines)&&line)lines.push(line);
+  for(i=0;i<lines.length;i++)ctx.fillText(lines[i],x,y+i*lineHeight);
+  return y+lines.length*lineHeight;
+}
+function endingText(){
+  var W=wealth();
+  if(W>=30000&&S.wisdom>=60&&S.health>=75)return '🌟 均衡成長型理財家';
+  if(S.wisdom>=70)return '🧠 未來潛力型理財家';
+  if(S.health>=85&&S.cash>=6000)return '🛡️ 穩健防守型理財家';
+  if(W>=32000&&S.health<65)return '💸 高報酬冒險家';
+  return '🧭 探索中的理財家';
+}
+function drawLineChart(ctx,x,y,w,h,values){
+  var i,max=30000,min=0;
+  for(i=0;i<values.length;i++)if(values[i]>max)max=values[i];
+  max=Math.ceil(max/5000)*5000;
+  ctx.strokeStyle='#d5d8df';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+h);ctx.lineTo(x+w,y+h);ctx.stroke();
+  ctx.font='15px Arial';ctx.fillStyle='#667085';
+  for(i=0;i<values.length;i++){
+    var px=x+(w*(i/(values.length-1||1)));
+    ctx.fillText('R'+(i+1),px-10,y+h+24);
+  }
+  ctx.strokeStyle='#6750a4';ctx.lineWidth=4;ctx.beginPath();
+  for(i=0;i<values.length;i++){
+    var px2=x+(w*(i/(values.length-1||1)));
+    var py=y+h-((values[i]-min)/(max-min))*h;
+    if(i===0)ctx.moveTo(px2,py);else ctx.lineTo(px2,py);
+  }
+  ctx.stroke();
+  for(i=0;i<values.length;i++){
+    var px3=x+(w*(i/(values.length-1||1)));
+    var py2=y+h-((values[i]-min)/(max-min))*h;
+    ctx.fillStyle='#6750a4';ctx.beginPath();ctx.arc(px3,py2,6,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#182033';ctx.font='14px Arial';ctx.fillText('
+g('restartBtn').onclick=function(){location.reload()};
+updateTop();
+})();
+</script>
+</body>
+</html>+Math.round(values[i]/1000)+'k',px3-16,py2-10);
+  }
+}
+function drawMetricBars(ctx,x,y,w,h){
+  var W=Math.round(wealth()),items=[
+    {label:'金融',value:Math.min(100,Math.round(W/400)),text:money(W)},
+    {label:'智慧',value:S.wisdom,text:String(S.wisdom)},
+    {label:'健康',value:S.health,text:String(S.health)}
+  ],i,gap=w/items.length,bw=gap*0.5;
+  ctx.strokeStyle='#d5d8df';ctx.beginPath();ctx.moveTo(x,y+h);ctx.lineTo(x+w,y+h);ctx.stroke();
+  for(i=0;i<items.length;i++){
+    var bh=(items[i].value/100)*h,bx=x+i*gap+gap*0.25,by=y+h-bh;
+    ctx.fillStyle=i===0?'#6750a4':(i===1?'#2f897b':'#d97706');
+    ctx.fillRect(bx,by,bw,bh);
+    ctx.fillStyle='#182033';ctx.font='15px Arial';ctx.fillText(items[i].label,bx+8,y+h+22);
+    ctx.fillText(items[i].text,bx,by-8);
+  }
+}
+function downloadResultImage(){
+  var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+  canvas.width=1400;canvas.height=2300;
+  ctx.fillStyle='#f6f4fb';ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  drawRoundedRect(ctx,40,40,1320,180,24,'#59449c');
+  ctx.fillStyle='#fff';ctx.font='bold 42px Arial';ctx.fillText('💰 2.2 萬投資大富翁｜挑戰結果',75,105);
+  ctx.font='24px Arial';ctx.fillText('隊伍：'+S.team,75,150);
+  ctx.fillText('結局：'+endingText(),75,188);
+
+  var W=wealth(),cards=[
+    ['最終金融資產',money(W)],
+    ['最終現金',money(S.cash)],
+    ['智慧',S.wisdom],
+    ['健康',S.health]
+  ],i;
+  for(i=0;i<cards.length;i++){
+    var cx=60+i*320;
+    drawRoundedRect(ctx,cx,260,280,120,16,'#fff','#e0e2e7');
+    ctx.fillStyle='#667085';ctx.font='20px Arial';ctx.fillText(cards[i][0],cx+20,305);
+    ctx.fillStyle='#182033';ctx.font='bold 30px Arial';ctx.fillText(String(cards[i][1]),cx+20,348);
+  }
+
+  ctx.fillStyle='#182033';ctx.font='bold 30px Arial';ctx.fillText('🏆 結局獎項',60,445);
+  var A=awardData();
+  for(i=0;i<A.length;i++){
+    var ay=480+i*100;
+    drawRoundedRect(ctx,60,ay,1280,82,14,A[i][1]?'#fff4cd':'#fff','#e0e2e7');
+    ctx.fillStyle='#182033';ctx.font='bold 23px Arial';
+    ctx.fillText((A[i][1]?'✅ ':'⬜ ')+A[i][0],82,ay+32);
+    ctx.fillStyle='#555';ctx.font='18px Arial';wrapText(ctx,A[i][2],82,ay+62,1180,22,1);
+  }
+
+  ctx.fillStyle='#182033';ctx.font='bold 30px Arial';ctx.fillText('📈 分析圖表',60,930);
+  drawRoundedRect(ctx,60,965,620,315,16,'#fff','#e0e2e7');
+  ctx.font='bold 22px Arial';ctx.fillText('五輪金融資產變化',85,1005);
+  var vals=[];for(i=0;i<S.history.length;i++)vals.push(Math.round(S.history[i].after));
+  drawLineChart(ctx,100,1045,530,170,vals);
+
+  drawRoundedRect(ctx,720,965,620,315,16,'#fff','#e0e2e7');
+  ctx.font='bold 22px Arial';ctx.fillStyle='#182033';ctx.fillText('最終指標比較',745,1005);
+  drawMetricBars(ctx,770,1045,500,170);
+
+  ctx.fillStyle='#182033';ctx.font='bold 30px Arial';ctx.fillText('📜 五輪選擇歷程',60,1345);
+  var hy=1380;
+  for(i=0;i<S.history.length;i++){
+    var h=S.history[i];
+    drawRoundedRect(ctx,60,hy,1280,150,14,'#fff','#e0e2e7');
+    ctx.fillStyle='#182033';ctx.font='bold 21px Arial';
+    ctx.fillText('第 '+h.round+' 輪｜'+h.market+' ＋ '+h.life,82,hy+32);
+    ctx.fillStyle='#555';ctx.font='17px Arial';
+    ctx.fillText('金融資產：'+money(h.before)+' → '+money(h.after),82,hy+64);
+    ctx.fillText('智慧：'+h.wisdom+'　健康：'+h.health,490,hy+64);
+    ctx.fillText('投保：'+(h.insurance?'是':'否')+'　進修：'+(h.training?'是':'否'),760,hy+64);
+    ctx.fillStyle='#333';ctx.font='16px Arial';
+    wrapText(ctx,'決策理由：'+(h.reason||'未填寫'),82,hy+98,1170,23,2);
+    hy+=168;
+  }
+
+  ctx.fillStyle='#667085';ctx.font='16px Arial';
+  ctx.fillText('2.2 萬投資大富翁｜自動產生結果圖',60,canvas.height-40);
+
+  var a=document.createElement('a');
+  a.download=(S.team||'投資挑戰')+'_結果圖.png';
+  a.href=canvas.toDataURL('image/png');
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+g('downloadBtn').onclick=function(){downloadResultImage()};
 g('restartBtn').onclick=function(){location.reload()};
 updateTop();
 })();
