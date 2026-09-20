@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>山林材料偵探｜2 分鐘極速配對</title>
+<style>
+  :root{--bg:#f5f1e6;--ink:#26352d;--deep:#193f35;--leaf:#3f7d5a;--leaf2:#70a878;--cream:#fffaf0;--gold:#e7b85d;--danger:#d85f50;--line:#315d49;--muted:#6f7d74;--shadow:0 12px 28px rgba(35,64,49,.13);--pair1:#e07159;--pair2:#3b82c4;--pair3:#40a35a;--pair4:#a364d7}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 10%,rgba(112,168,120,.20),transparent 26%),radial-gradient(circle at 90% 15%,rgba(231,184,93,.16),transparent 23%),linear-gradient(180deg,#eef5eb 0,#f8f4ea 44%,#f5f1e6 100%);overflow-x:hidden}
+  .app{max-width:1480px;margin:auto;padding:22px 26px 28px}
+  header{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin-bottom:16px}
+  .eyebrow{font-weight:900;color:var(--leaf);letter-spacing:.12em;font-size:.95rem}
+  h1{margin:4px 0 4px;font-size:clamp(2rem,4vw,4rem);line-height:1}
+  .subtitle{margin:0;color:var(--muted);font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700}
+  .timer{width:168px;height:104px;border-radius:24px;background:var(--deep);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+  .timer small{opacity:.75;font-weight:800;letter-spacing:.12em}
+  #time{font-size:2.7rem;font-weight:1000;line-height:1.05;font-variant-numeric:tabular-nums}
+  .topbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border:1px solid rgba(49,93,73,.12);padding:12px 14px;border-radius:18px;margin-bottom:14px}
+  button{border:0;border-radius:14px;padding:11px 16px;font-weight:900;font-size:1rem;cursor:pointer;transition:.15s transform,.15s opacity,.15s box-shadow}
+  button:hover{transform:translateY(-1px)} button:active{transform:translateY(0)}
+  .primary{background:var(--leaf);color:white;box-shadow:0 6px 14px rgba(63,125,90,.24)}
+  .secondary{background:#e9efe9;color:var(--deep)} .gold{background:var(--gold);color:#3b2c12}
+  .status{margin-left:auto;font-weight:900;color:var(--deep)}
+  .panelgrid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-bottom:16px}
+  .guide,.summary{background:rgba(255,255,255,.88);border:1px solid rgba(49,93,73,.12);border-radius:20px;padding:14px 16px;box-shadow:var(--shadow)}
+  .guide h2,.summary h2{margin:0 0 8px;font-size:1.15rem;color:var(--deep)}
+  .guide ol{margin:0 0 0 1.2rem;padding:0;line-height:1.65;font-weight:800}
+  .summary #currentPick{font-weight:900;color:var(--deep);margin-bottom:10px}
+  .pair-list{display:grid;gap:8px}
+  .pair-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:14px;background:#f6faf6;border:1px dashed #d5e3d8;font-weight:800;color:#355544;min-height:46px}
+  .pair-chip{min-width:28px;height:28px;border-radius:999px;color:white;display:grid;place-items:center;font-weight:1000;font-size:.92rem;box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .pair-chip.p1{background:var(--pair1)} .pair-chip.p2{background:var(--pair2)} .pair-chip.p3{background:var(--pair3)} .pair-chip.p4{background:var(--pair4)}
+  .board{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:56px;min-height:530px}
+  .column{position:relative;z-index:2}
+  .colhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px;font-size:1.22rem;font-weight:1000;color:var(--deep)}
+  .hint{font-size:.84rem;color:var(--muted);font-weight:800}
+  .cards{display:grid;gap:13px}
+  .card{min-height:116px;background:rgba(255,255,255,.94);border:3px solid transparent;border-radius:22px;padding:15px 17px;display:grid;grid-template-columns:62px 1fr;gap:14px;align-items:center;box-shadow:var(--shadow);cursor:pointer;transition:.18s transform,.18s border,.18s background;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;background:#dfe9e1}
+  .card:hover{transform:translateY(-2px)} .card.selected{border-color:var(--gold);background:#fffaf0} .card.selected::before{background:var(--gold)}
+  .card.paired{background:#fbfffb}
+  .icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:2rem;background:#eef5eb;border:1px solid #dce7da}
+  .num{font-size:.82rem;color:var(--leaf);font-weight:1000;letter-spacing:.08em;text-transform:uppercase}
+  .title{font-size:clamp(1.08rem,1.4vw,1.35rem);font-weight:1000;line-height:1.28}
+  .detail{font-size:.9rem;color:var(--muted);font-weight:700;margin-top:4px;line-height:1.4}
+  .badge{position:absolute;right:12px;top:10px;padding:5px 10px;border-radius:999px;background:#edf4ee;font-size:.76rem;font-weight:1000;color:var(--leaf);display:none}
+  .card.paired .badge{display:block}
+  .card[data-pair-order="1"]{border-color:var(--pair1)} .card[data-pair-order="1"]::before{background:var(--pair1)} .card[data-pair-order="1"] .badge{display:block;background:var(--pair1);color:#fff}
+  .card[data-pair-order="2"]{border-color:var(--pair2)} .card[data-pair-order="2"]::before{background:var(--pair2)} .card[data-pair-order="2"] .badge{display:block;background:var(--pair2);color:#fff}
+  .card[data-pair-order="3"]{border-color:var(--pair3)} .card[data-pair-order="3"]::before{background:var(--pair3)} .card[data-pair-order="3"] .badge{display:block;background:var(--pair3);color:#fff}
+  .card[data-pair-order="4"]{border-color:var(--pair4)} .card[data-pair-order="4"]::before{background:var(--pair4)} .card[data-pair-order="4"] .badge{display:block;background:var(--pair4);color:#fff}
+  .problem:nth-child(1) .icon{background:#fff3eb}.problem:nth-child(2) .icon{background:#f5f1ff}.problem:nth-child(3) .icon{background:#eef8ff}.problem:nth-child(4) .icon{background:#eef9ef}
+  .plant:nth-child(1) .icon{background:#eff9ef}.plant:nth-child(2) .icon{background:#fff7e8}.plant:nth-child(3) .icon{background:#eef7fb}.plant:nth-child(4) .icon{background:#f8f0ff}
+  .lines{position:absolute;inset:38px 0 0;z-index:1;pointer-events:none;overflow:visible}
+  .result{margin-top:18px;padding:18px 20px;border-radius:22px;background:rgba(255,255,255,.88);border:1px solid rgba(49,93,73,.12);box-shadow:var(--shadow);display:none}
+  .result.show{display:block}.result h2{margin:0 0 8px;font-size:1.45rem;color:var(--deep)}.result p{margin:4px 0;font-weight:750}
+  .motto{margin-top:10px;border-left:6px solid var(--gold);padding:10px 14px;background:#fff8e9;border-radius:12px;font-size:1.12rem;font-weight:1000}
+  .footer-tip{margin-top:12px;color:var(--muted);font-size:.88rem;text-align:center;font-weight:700}
+  @media(max-width:1050px){.panelgrid{grid-template-columns:1fr}}
+  @media(max-width:900px){header{grid-template-columns:1fr}.timer{width:100%;height:88px}.board{grid-template-columns:1fr;gap:22px}.lines{display:none}.status{width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><div class="eyebrow">🎮 2 分鐘極速挑戰</div><h1>山林材料偵探</h1><p class="subtitle">全班一起討論：先看生活難題，再找出最適合的植物材料！</p></div><div class="timer"><small>剩餘時間</small><div id="time">02:00</div></div></header>
+<div class="topbar"><button id="startBtn" class="primary">▶ 開始 2 分鐘</button><button id="pauseBtn" class="secondary">⏸ 暫停</button><button id="revealBtn" class="gold">👀 公布答案</button><button id="resetBtn" class="secondary">↻ 重設</button><div id="status" class="status">全班一起討論，再由老師操作配對</div></div>
+<section class="panelgrid">
+<div class="guide"><h2>🗣️ 操作方式</h2><ol><li>先點左邊一個「生活難題」。</li><li>再點右邊一個「植物超能力」。</li><li>成功配對後，左右兩張卡片會出現同一個編號與同一種顏色。</li><li>上方也會同步列出目前的配對結果，方便全班追蹤。</li></ol></div>
+<div class="summary"><h2>🔗 目前配對紀錄</h2><div id="currentPick">尚未選擇題目</div><div class="pair-list" id="pairList"><div class="pair-item">尚未完成配對</div></div></div>
+</section>
+<main class="board" id="board"><svg class="lines" id="lines" aria-hidden="true"></svg>
+<section class="column"><div class="colhead"><span>🧩 4 大生活難題</span><span class="hint">先點難題</span></div><div class="cards" id="problems">
+<div class="card problem" data-key="bow"><div class="icon">🏹</div><div><div class="num">難題 ①</div><div class="title">獵人需要彈性好、強力回彈的「神弓」</div><div class="detail">什麼材料彎得下去，又能有力彈回？</div></div><div class="badge">配對</div></div>
+<div class="card problem" data-key="beam"><div class="icon">🏠</div><div><div class="num">難題 ②</div><div class="title">蓋家屋要防白蟻、耐震、質輕的「大樑」</div><div class="detail">山裡搬運不容易，還得撐得久。</div></div><div class="badge">配對</div></div>
+<div class="card problem" data-key="basket"><div class="icon">🧺</div><div><div class="num">難題 ③</div><div class="title">翻山越嶺背幾十公斤獵物的「背簍」</div><div class="detail">需要強韌、耐磨、耐拉的材料。</div></div><div class="badge">配對</div></div>
+<div class="card problem" data-key="cloth"><div class="icon">👕</div><div><div class="num">難題 ④</div><div class="title">族人要做夏天通風耐穿的「衣服」</div><div class="detail">需要能抽出纖維、可以紡織成布。</div></div><div class="badge">配對</div></div>
+</div></section>
+<section class="column"><div class="colhead"><span>🌿 4 種植物超能力</span><span class="hint">再點植物完成配對</span></div><div class="cards" id="plants">
+<div class="card plant" data-key="rattan"><div class="icon">🎋</div><div><div class="num">植物 A</div><div class="title">黃藤</div><div class="detail">像粗繩一樣強韌，耐磨、耐拉。</div></div><div class="badge">配對</div></div>
+<div class="card plant" data-key="ramie"><div class="icon">🌾</div><div><div class="num">植物 B</div><div class="title">苧麻</div><div class="detail">外皮有細長、堅韌的纖維，可用來織布。</div></div><div class="badge">配對</div></div>
+<div class="card plant" data-key="cypress"><div class="icon">🌲</div><div><div class="num">植物 C</div><div class="title">紅檜／扁柏（軟木）</div><div class="detail">油脂多可防蛀，微彈抗震，質輕好搬。</div></div><div class="badge">配對</div></div>
+<div class="card plant" data-key="lagerstroemia"><div class="icon">🌿</div><div><div class="num">植物 D</div><div class="title">九芎木</div><div class="detail">木頭彈性佳，壓彎後能強力回彈。</div></div><div class="badge">配對</div></div>
+</div></section></main>
+<section class="result" id="result"><h2>🔎 偵探解密</h2><p>🏹 神弓 → <b>九芎木</b>｜靠的是彈性與回彈力</p><p>🏠 大樑 → <b>紅檜／扁柏</b>｜防蛀、微彈抗震，而且較輕</p><p>🧺 背簍 → <b>黃藤</b>｜強韌、耐磨、耐拉</p><p>👕 衣服 → <b>苧麻</b>｜可取得細長堅韌纖維來織布</p><div class="motto">🌱 先民不是隨便取材，而是深入認識自然特性，做到「因材適用、物盡其用」。</div></section>
+<div class="footer-tip">建議課堂流程：全班討論 → 老師操作配對 → 公布答案 → 帶學生說出「材料特性 → 對應用途」。</div>
+</div>
+<script>
+const answers={bow:"lagerstroemia",beam:"cypress",basket:"rattan",cloth:"ramie"};
+const labels={bow:"神弓",beam:"大樑",basket:"背簍",cloth:"衣服",rattan:"黃藤",ramie:"苧麻",cypress:"紅檜／扁柏",lagerstroemia:"九芎木"};
+let selectedProblem=null,pairs={},seconds=120,ticking=null,revealed=false;
+const timeEl=document.getElementById("time"),statusEl=document.getElementById("status"),resultEl=document.getElementById("result"),lineSvg=document.getElementById("lines"),currentPick=document.getElementById("currentPick"),pairList=document.getElementById("pairList");
+function fmt(s){return Math.floor(s/60).toString().padStart(2,"0")+":"+(s%60).toString().padStart(2,"0")}
+function updateTime(){timeEl.textContent=fmt(seconds);timeEl.style.color=seconds<=20?"#ffd36d":"white"}
+function start(){if(ticking)return;ticking=setInterval(()=>{seconds--;updateTime();if(seconds<=0){clearInterval(ticking);ticking=null;statusEl.textContent="⏰ 時間到！請全班一起確認答案";reveal()}},1000);statusEl.textContent="🔥 討論中：先選一個生活難題，再配對植物"}
+function pause(){if(ticking){clearInterval(ticking);ticking=null;statusEl.textContent="⏸ 已暫停"}}
+function reset(){pause();seconds=120;updateTime();revealed=false;pairs={};selectedProblem=null;document.querySelectorAll(".card").forEach(c=>{c.classList.remove("selected","paired","wrong");c.dataset.pairOrder="";c.querySelector(".badge").textContent="配對"});resultEl.classList.remove("show");statusEl.textContent="全班一起討論，再由老師操作配對";currentPick.textContent="尚未選擇題目";renderPairList();drawLines()}
+function reveal(){revealed=true;resultEl.classList.add("show");["bow","beam","basket","cloth"].forEach((pk,idx)=>pairs[pk]={plant:answers[pk],order:idx+1});refreshPairState();statusEl.textContent="✅ 答案公布：一起說出每種材料為什麼最適合";drawLines(true);resultEl.scrollIntoView({behavior:"smooth",block:"nearest"})}
+document.querySelectorAll(".problem").forEach(card=>card.addEventListener("click",()=>{if(revealed)return;document.querySelectorAll(".problem").forEach(c=>c.classList.remove("selected"));selectedProblem=card.dataset.key;card.classList.add("selected");currentPick.textContent="目前選擇："+labels[selectedProblem]+"（請再點右邊植物）";statusEl.textContent="已選生活難題，請全班討論後選植物"}));
+document.querySelectorAll(".plant").forEach(card=>card.addEventListener("click",()=>{if(revealed||!selectedProblem)return;Object.keys(pairs).forEach(pk=>{if(pairs[pk].plant===card.dataset.key&&pk!==selectedProblem)delete pairs[pk]});const existing=pairs[selectedProblem],order=existing?.order||nextAvailableOrder();pairs[selectedProblem]={plant:card.dataset.key,order};document.querySelector('.problem[data-key="'+selectedProblem+'"]').classList.remove("selected");currentPick.textContent="已配對："+labels[selectedProblem]+" ↔ "+labels[card.dataset.key];selectedProblem=null;refreshPairState();drawLines()}));
+function nextAvailableOrder(){const used=Object.values(pairs).map(v=>v.order).sort((a,b)=>a-b);for(let i=1;i<=4;i++)if(!used.includes(i))return i;return 4}
+function refreshPairState(){document.querySelectorAll(".card").forEach(c=>{c.classList.remove("paired","wrong");c.dataset.pairOrder="";c.querySelector(".badge").textContent="配對"});Object.entries(pairs).forEach(([p,data])=>{const pc=document.querySelector('.problem[data-key="'+p+'"]'),pl=document.querySelector('.plant[data-key="'+data.plant+'"]');[pc,pl].forEach(el=>{el.classList.add("paired");el.dataset.pairOrder=String(data.order);el.querySelector(".badge").textContent="連線 "+data.order})});renderPairList();statusEl.textContent="已完成 "+Object.keys(pairs).length+"/4 組配對"}
+function renderPairList(){const entries=Object.entries(pairs).sort((a,b)=>a[1].order-b[1].order);if(entries.length===0){pairList.innerHTML='<div class="pair-item">尚未完成配對</div>';return}pairList.innerHTML=entries.map(([p,data])=>'<div class="pair-item"><span class="pair-chip p'+data.order+'">'+data.order+'</span><span>'+labels[p]+' ↔ '+labels[data.plant]+'</span></div>').join("")}
+function drawLines(forceCorrect=false){if(window.innerWidth<=900){lineSvg.innerHTML="";return}const board=document.getElementById("board"),b=board.getBoundingClientRect();lineSvg.setAttribute("width",b.width);lineSvg.setAttribute("height",b.height);lineSvg.setAttribute("viewBox","0 0 "+b.width+" "+b.height);lineSvg.innerHTML="";const source=forceCorrect?{bow:{plant:"lagerstroemia",order:1},beam:{plant:"cypress",order:2},basket:{plant:"rattan",order:3},cloth:{plant:"ramie",order:4}}:pairs;Object.entries(source).forEach(([p,data])=>{const a=document.querySelector('.problem[data-key="'+p+'"]').getBoundingClientRect(),z=document.querySelector('.plant[data-key="'+data.plant+'"]').getBoundingClientRect(),x1=a.right-b.left,y1=a.top-b.top+a.height/2,x2=z.left-b.left,y2=z.top-b.top+z.height/2,dx=(x2-x1)*.48,color=getComputedStyle(document.documentElement).getPropertyValue("--pair"+data.order).trim()||"#315d49";const path=document.createElementNS("http://www.w3.org/2000/svg","path");path.setAttribute("d","M "+x1+" "+y1+" C "+(x1+dx)+" "+y1+", "+(x2-dx)+" "+y2+", "+x2+" "+y2);path.setAttribute("fill","none");path.setAttribute("stroke",color);path.setAttribute("stroke-width","6");path.setAttribute("stroke-linecap","round");path.setAttribute("opacity",".9");lineSvg.appendChild(path);const mx=(x1+x2)/2,my=(y1+y2)/2,g=document.createElementNS("http://www.w3.org/2000/svg","g"),circle=document.createElementNS("http://www.w3.org/2000/svg","circle"),text=document.createElementNS("http://www.w3.org/2000/svg","text");circle.setAttribute("cx",mx);circle.setAttribute("cy",my);circle.setAttribute("r","15");circle.setAttribute("fill",color);text.setAttribute("x",mx);text.setAttribute("y",my+5);text.setAttribute("text-anchor","middle");text.setAttribute("font-size","14");text.setAttribute("font-weight","900");text.setAttribute("fill","#fff");text.textContent=data.order;g.appendChild(circle);g.appendChild(text);lineSvg.appendChild(g)})}
+document.getElementById("startBtn").onclick=start;document.getElementById("pauseBtn").onclick=pause;document.getElementById("resetBtn").onclick=reset;document.getElementById("revealBtn").onclick=reveal;window.addEventListener("resize",()=>drawLines(revealed));window.addEventListener("scroll",()=>drawLines(revealed),{passive:true});updateTime();renderPairList();setTimeout(drawLines,100);
+</script>
+</body>
+</html>
