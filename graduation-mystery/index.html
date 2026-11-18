@@ -186,11 +186,11 @@ function saveHistoryPNG(page=0){
  if(!s.ending.revealed||!allFour())return;
  const total=historyImagePageCount();
  if(page<0||page>=total)return;
- const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=15000;
- const c=canvas.getContext("2d");if(!c){alert("此瀏覽器無法建立圖片，請使用列印功能。");return}
- const height=paintHistory(c,page);
+ const measure=document.createElement("canvas");measure.width=1080;measure.height=1;
+ const m=measure.getContext("2d");if(!m){alert("此瀏覽器無法建立圖片，請使用列印功能。");return}
+ const height=paintHistory(m,page);
  const result=document.createElement("canvas");result.width=1080;result.height=Math.min(height,15000);
- const ctx=result.getContext("2d");ctx.drawImage(canvas,0,0,result.width,result.height,0,0,result.width,result.height);
+ const ctx=result.getContext("2d");paintHistory(ctx,page);
  const fileName="消失的第六頁_遊玩歷程_"+safeFileName(s.team.trim()||"探索隊")+(total>1?"_"+(page+1):"")+".png";
  const a=document.createElement("a");a.download=fileName;a.href=result.toDataURL("image/png");document.body.appendChild(a);a.click();a.remove();
  if(total>1){const el=document.getElementById("historyImagePages");if(el)el.innerHTML='<p class="small">完整時間軸共分成 '+total+' 張圖片，請逐張儲存：</p>'+Array.from({length:total},(_,i)=>'<button class="btn alt" onclick="saveHistoryPNG('+i+')">儲存第 '+(i+1)+' 張／共 '+total+' 張</button>').join("")}
