@@ -86,7 +86,7 @@ function revealEnding(){if(!s.ending.solved)return;if(!s.ending.revealed)logEven
 function saveEndingNote(v){s.ending.note=v;persist();const el=document.getElementById("endingPreview");if(el)el.textContent=v.trim()||"故事還在繼續……"}
 function copyEnding(){const content="《消失的第六頁》\n"+(s.team.trim()||"我們的探索隊")+"\n"+(s.ending.note.trim()||"故事還在繼續……");if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(content).then(()=>msg("endingCopy","已複製旅行紀錄。")).catch(()=>fallbackCopy(content))}else fallbackCopy(content)}
 function fallbackCopy(t){const x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();try{document.execCommand("copy");msg("endingCopy","已複製旅行紀錄。")}catch(e){msg("endingCopy","請長按文字手動複製。")}x.remove()}
-function ending(){if(!allFour())return '<div class="card"><h2>最終章尚未開啟</h2><p>需要先完成前四站。</p></div>';let out='<div class="hero">'+blockTitle("神祕日誌","最終檔案")+'<h2>從來沒有消失的第六頁</h2><p>四份日誌都找回來了，第六頁卻仍然不見蹤影。</p><p>只留下最後的訊息：「這不是一份旅行紀錄，而是一段尚未寫完的故事。請重新閱讀四份檔案。」</p></div>';out+='<div class="card"><h2>四張日誌卡</h2><p class="small">回想在每一站學到的事情，找出最後的故事順序。</p><div class="records">'+Object.keys(endingCards).map(k=>'<div class="record"><b>'+endingCards[k].icon+' '+endingCards[k].name+'</b><strong>'+endingCards[k].place+'</strong><p class="small">'+endingCards[k].description+'</p></div>').join("")+'</div></div>';out+='<div class="card">'+blockTitle("FINAL MYSTERY","最後的四道封印")+'<h2>把故事排回正確的順序</h2><div class="notice">「每個故事，都從一個對未來的期盼開始。<br><br>但前進的路上，總會遇到意想不到的變化。<br><br>面對未知，我們需要尋找線索，理解眼前的一切。<br><br>當準備好了，就勇敢動手，創造自己的答案。」</div><p>請移動日誌卡，讓它們符合這段故事的順序。</p>'+(s.ending.solved?'<div class="ok"><b>🔓 最後的封印已解除！</b><p>心願 → 改變 → 發現 → 嘗試</p></div>':'<div class="task">'+endingOrder.map((k,i)=>'<div class="row ending-sort"><span>'+endingCards[k].icon+' <b>'+endingCards[k].name+'</b><span class="small">｜'+endingCards[k].place+'</span></span><span><button aria-label="上移" onclick="moveEnding('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button> <button aria-label="下移" onclick="moveEnding('+i+',1)" '+(i===3?'disabled':'')+'>↓</button></span></div>').join("")+'</div><button class="btn" onclick="checkEnding()">解除最後的封印</button><div id="endingMsg"></div>')+'</div>';if(s.ending.solved){out+='<div class="card final-chapter"><div class="success-illustration">📖✨</div><h2>第六頁的位置，已確認。</h2>'+(s.ending.revealed?'<div class="final-story"><p>你們以為第六頁被人偷走了。</p><p>但當日誌打開，你們卻發現——</p><p><strong>這一頁，原來一直都是空白的。</strong></p><p>因為前面的故事已經寫好，只有這一頁，必須由你們自己完成。</p><p>這趟旅行，你們一起觀察、尋找、討論，也一起解決了困難。</p><p>而在即將畢業的現在，你們也準備好迎接下一段尚未寫下的故事。</p><p><strong>第六頁從來沒有消失，它只是一直等著你們。</strong></p></div>':'<p>日誌封印已解除。現在，翻開最後一頁。</p><button class="btn" onclick="revealEnding()">📖 翻開最後一頁</button>')+'</div>'};if(s.ending.revealed){out+='<div class="card final-chapter"><h2>第六頁｜屬於我們的故事</h2><p>五個人一起想一想：如果只能用一句話記錄這趟畢業旅行，你們想留下什麼？</p><label>探索隊</label><p class="notice">'+esc(s.team.trim()||"我們的探索隊")+'</p><label for="finalNote">我們想留下的一句話（可留白）</label><textarea id="finalNote" placeholder="由老師輸入五個人的共同回憶" oninput="saveEndingNote(this.value)">'+esc(s.ending.note)+'</textarea><div class="diary-page"><div class="eyebrow">PAGE 006｜OUR STORY</div><h3>'+esc(s.team.trim()||"我們的探索隊")+'</h3><p id="endingPreview">'+esc(s.ending.note.trim()||"故事還在繼續……")+'</p></div><button class="btn" onclick="downloadHistory()">📥 下載完整遊玩歷程（HTML）</button><p class="small">下載後可直接開啟閱讀，也可以選擇列印或另存 PDF；包含四站成果、解謎時間軸、最後的排序與第六頁留言。</p><button class="btn alt" onclick="copyEnding()">📋 只複製第六頁文字</button><div id="endingCopy"></div><p class="small">文字只保存在目前這支手機；另一組可以寫自己的第六頁，不會互相影響。</p><button class="btn alt" onclick="show(\'home\')">返回旅行日誌</button></div>'}return out}
+function ending(){if(!allFour())return '<div class="card"><h2>最終章尚未開啟</h2><p>需要先完成前四站。</p></div>';let out='<div class="hero">'+blockTitle("神祕日誌","最終檔案")+'<h2>從來沒有消失的第六頁</h2><p>四份日誌都找回來了，第六頁卻仍然不見蹤影。</p><p>只留下最後的訊息：「這不是一份旅行紀錄，而是一段尚未寫完的故事。請重新閱讀四份檔案。」</p></div>';out+='<div class="card"><h2>四張日誌卡</h2><p class="small">回想在每一站學到的事情，找出最後的故事順序。</p><div class="records">'+Object.keys(endingCards).map(k=>'<div class="record"><b>'+endingCards[k].icon+' '+endingCards[k].name+'</b><strong>'+endingCards[k].place+'</strong><p class="small">'+endingCards[k].description+'</p></div>').join("")+'</div></div>';out+='<div class="card">'+blockTitle("FINAL MYSTERY","最後的四道封印")+'<h2>把故事排回正確的順序</h2><div class="notice">「每個故事，都從一個對未來的期盼開始。<br><br>但前進的路上，總會遇到意想不到的變化。<br><br>面對未知，我們需要尋找線索，理解眼前的一切。<br><br>當準備好了，就勇敢動手，創造自己的答案。」</div><p>請移動日誌卡，讓它們符合這段故事的順序。</p>'+(s.ending.solved?'<div class="ok"><b>🔓 最後的封印已解除！</b><p>心願 → 改變 → 發現 → 嘗試</p></div>':'<div class="task">'+endingOrder.map((k,i)=>'<div class="row ending-sort"><span>'+endingCards[k].icon+' <b>'+endingCards[k].name+'</b><span class="small">｜'+endingCards[k].place+'</span></span><span><button aria-label="上移" onclick="moveEnding('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button> <button aria-label="下移" onclick="moveEnding('+i+',1)" '+(i===3?'disabled':'')+'>↓</button></span></div>').join("")+'</div><button class="btn" onclick="checkEnding()">解除最後的封印</button><div id="endingMsg"></div>')+'</div>';if(s.ending.solved){out+='<div class="card final-chapter"><div class="success-illustration">📖✨</div><h2>第六頁的位置，已確認。</h2>'+(s.ending.revealed?'<div class="final-story"><p>你們以為第六頁被人偷走了。</p><p>但當日誌打開，你們卻發現——</p><p><strong>這一頁，原來一直都是空白的。</strong></p><p>因為前面的故事已經寫好，只有這一頁，必須由你們自己完成。</p><p>這趟旅行，你們一起觀察、尋找、討論，也一起解決了困難。</p><p>而在即將畢業的現在，你們也準備好迎接下一段尚未寫下的故事。</p><p><strong>第六頁從來沒有消失，它只是一直等著你們。</strong></p></div>':'<p>日誌封印已解除。現在，翻開最後一頁。</p><button class="btn" onclick="revealEnding()">📖 翻開最後一頁</button>')+'</div>'};if(s.ending.revealed){out+='<div class="card final-chapter"><h2>第六頁｜屬於我們的故事</h2><p>五個人一起想一想：如果只能用一句話記錄這趟畢業旅行，你們想留下什麼？</p><label>探索隊</label><p class="notice">'+esc(s.team.trim()||"我們的探索隊")+'</p><label for="finalNote">我們想留下的一句話（可留白）</label><textarea id="finalNote" placeholder="由老師輸入五個人的共同回憶" oninput="saveEndingNote(this.value)">'+esc(s.ending.note)+'</textarea><div class="diary-page"><div class="eyebrow">PAGE 006｜OUR STORY</div><h3>'+esc(s.team.trim()||"我們的探索隊")+'</h3><p id="endingPreview">'+esc(s.ending.note.trim()||"故事還在繼續……")+'</p></div><button class="btn" onclick="saveHistoryPNG(0)">🖼️ 儲存遊玩歷程圖片（PNG）</button><button class="btn alt" onclick="printHistory()">🖨️ 列印／另存 PDF</button><div id="historyImagePages"></div><p class="small">兩種方式都保留四站成果、遊玩紀錄與第六頁。歷程較長時會分成多張圖片；列印版可完整保存。</p><button class="btn alt" onclick="copyEnding()">📋 只複製第六頁文字</button><div id="endingCopy"></div><p class="small">文字只保存在目前這支手機；另一組可以寫自己的第六頁，不會互相影響。</p><button class="btn alt" onclick="show(\'home\')">返回旅行日誌</button></div>'}return out}
 
 
 const taskNames={
@@ -121,7 +121,80 @@ const finalNote=esc(s.ending.note.trim()||"故事還在繼續……");
 const noteHistory=s.history.length?'<table><thead><tr><th>時間</th><th>類型</th><th>內容</th></tr></thead><tbody>'+timeline+'</tbody></table>':'<p class="note">此版本啟用歷程記錄後，才會逐步記錄操作時間。已存在的舊進度可顯示完成狀態，但無法還原以前每次點擊與實際時間。</p>';
 return '<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>消失的第六頁｜'+team+'遊玩歷程</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{max-width:820px;margin:32px auto;padding:20px;font:16px/1.8 system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#493d32;background:#fff9ed}h1{margin-bottom:0;color:#5a664f}h2{font-size:20px;color:#62705d;border-bottom:1px solid #c9b896;padding-bottom:6px}section{background:#fffdf7;border:1px solid #dac7ab;border-radius:12px;padding:16px 22px;margin:18px 0;break-inside:avoid}.sub{color:#7c6b55;font-size:14px}.page{background:#f7edd6;border:2px solid #bc9c69;text-align:center;padding:30px 20px;font-size:19px;white-space:pre-wrap;overflow-wrap:anywhere}.note{background:#f6efdf;border-radius:9px;padding:11px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #ddcdb4;text-align:left;padding:7px;vertical-align:top}ul{padding-left:24px}footer{font-size:12px;color:#796e60;margin-top:30px}.print{background:#60735e;color:#fff;border:0;padding:10px 20px;border-radius:9px;font:inherit}@media print{body{margin:0;padding:0;background:#fff}.print{display:none}section{break-inside:avoid}}</style></head><body><button class="print" onclick="window.print()">列印或另存 PDF</button><h1>《消失的第六頁》｜遊玩歷程</h1><p class="sub">小隊：'+team+'　｜　匯出時間：'+esc(date)+'</p><p>四站線索已集齊，小隊破解了最後的四道封印。以下是這支手機儲存的解謎成果與可用的操作紀錄。</p>'+sections+'<section><h2>最終章｜第六頁</h2><p><b>最終排序：</b>心願 → 改變 → 發現 → 嘗試</p><p><b>結局：</b>第六頁從來沒有消失，它只是一直等著你們。</p><div class="page"><strong>PAGE 006｜'+team+'</strong><p>'+finalNote+'</p></div></section><section><h2>解謎時間軸</h2>'+noteHistory+'</section><footer>本報告由目前手機上的《消失的第六頁》離線整理產生；未將小隊紀錄上傳伺服器。既有舊紀錄可能只有任務完成狀態，沒有過去的精確操作時間。</footer></body></html>'
 }
-function downloadHistory(){if(!s.ending.revealed||!allFour())return;const content=htmlReport();const blob=new Blob(["\uFEFF",content],{type:"text/html;charset=utf-8"});const url=URL.createObjectURL(blob);const link=document.createElement("a");link.href=url;link.download="消失的第六頁_遊玩歷程_"+safeFileName(s.team.trim()||"探索隊")+".html";document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000)}
+
+function printHistory(){
+ if(!s.ending.revealed||!allFour())return;
+ const w=window.open("","_blank");
+ if(!w){alert("瀏覽器阻擋了列印視窗。請允許彈出視窗再試一次。");return}
+ w.document.open();w.document.write(htmlReport());w.document.close();
+ w.focus();
+}
+function historyImagePageCount(){return Math.max(1,Math.ceil((s.history||[]).length/42))}
+function paintHistory(ctx,pageIndex){
+ const W=1080,P=62,R=W-P*2;
+ ctx.textBaseline="top";ctx.textAlign="left";
+ const sheet=pageIndex===0;
+ let y=0;
+ const bg=(a,b,c,d,color,r=0)=>{ctx.fillStyle=color;if(r){ctx.beginPath();ctx.roundRect(a,b,c,d,r);ctx.fill()}else ctx.fillRect(a,b,c,d)};
+ const text=(t,x,py,font="28px sans-serif",color="#504232")=>{ctx.fillStyle=color;ctx.font=font;ctx.fillText(String(t),x,py)};
+ const wrap=(str,maxWidth,font="25px sans-serif")=>{ctx.font=font;let lines=[],line="";for(const char of String(str)){if(char==="\n"){lines.push(line);line="";continue}const next=line+char;if(ctx.measureText(next).width>maxWidth&&line){lines.push(line);line=char}else line=next}lines.push(line);return lines};
+ const paragraph=(t,x,maxWidth,font="25px sans-serif",color="#514636",lineHeight=39)=>{const lines=wrap(t,maxWidth,font);for(const line of lines){text(line,x,y,font,color);y+=lineHeight}return lines.length};
+ const title=(t)=>{y+=25;text(t,P,y,"bold 35px sans-serif","#536b5a");y+=58};
+ const line=()=>{bg(P,y,R,2,"#d7c5a6");y+=20};
+ bg(0,0,W,15000,"#fff7e7");
+ y=68;
+ if(sheet){
+  text("《消失的第六頁》｜遊玩歷程",P,y,"bold 46px sans-serif","#536a5a");y+=73;
+  paragraph("探索隊："+(s.team.trim()||"我們的探索隊"),P,R,"30px sans-serif");y+=6;
+  paragraph("匯出時間："+reportTime(new Date().toISOString()),P,R,"22px sans-serif","#7b6a53",32);y+=15;line();
+  for(const group of reportSections){
+   title(group.title);
+   paragraph(group.reflection,P,R,"25px sans-serif");
+   y+=12;
+   for(const [key,step] of group.steps){paragraph((s[key]&&s[key][step]?"✓ ":"□ ")+(taskNames[key+"."+step]||step),P+15,R-15,"24px sans-serif", "#4c5f4f",36)}
+   y+=14;
+   paragraph("解謎線索："+group.answer,P+10,R-10,"23px sans-serif","#665641",36);
+   y+=20;line();
+  }
+  title("最終結局｜第六頁");
+  paragraph("最終解謎順序：心願 → 改變 → 發現 → 嘗試",P,R,"25px sans-serif");
+  y+=15;
+  paragraph("第六頁從來沒有消失，它只是一直等著你們。",P,R,"25px sans-serif");
+  y+=30;
+  const note=s.ending.note.trim()||"故事還在繼續……";
+  const noteLines=wrap(note,R-74,"29px sans-serif");
+  const noteH=Math.max(165,noteLines.length*46+85);
+  bg(P,y,R,noteH,"#eee0c4",18);y+=31;
+  text("PAGE 006｜"+(s.team.trim()||"我們的探索隊"),P+29,y,"bold 26px sans-serif","#775a3d");y+=54;
+  for(const row of noteLines){text(row,P+29,y,"29px sans-serif","#4b3c2e");y+=46}
+  y+=noteH-(noteLines.length*46+85)+45;
+  line();
+ }
+ title("解謎時間軸"+(historyImagePageCount()>1?"（第 "+(pageIndex+1)+"／"+historyImagePageCount()+" 張）":""));
+ const ev=s.history.slice(pageIndex*42,(pageIndex+1)*42);
+ if(!ev.length){paragraph("這版遊戲啟用歷程記錄後才開始記錄操作。舊進度仍有完成狀態，但沒有過去每次點擊的實際時間。",P,R,"24px sans-serif");y+=15}
+ else for(const e of ev){
+  paragraph(reportTime(e.at)+"｜"+e.kind,P,R,"22px sans-serif","#836b4d",35);
+  paragraph(e.detail,P+20,R-20,"24px sans-serif","#4b4237",38);
+  y+=17;
+ }
+ y+=27;
+ paragraph("紀錄儲存於此手機；不同小隊不互相同步。",P,R,"21px sans-serif","#8a785f",32);
+ return Math.ceil(y+70);
+}
+function saveHistoryPNG(page=0){
+ if(!s.ending.revealed||!allFour())return;
+ const total=historyImagePageCount();
+ if(page<0||page>=total)return;
+ const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=15000;
+ const c=canvas.getContext("2d");if(!c){alert("此瀏覽器無法建立圖片，請使用列印功能。");return}
+ const height=paintHistory(c,page);
+ const result=document.createElement("canvas");result.width=1080;result.height=Math.min(height,15000);
+ const ctx=result.getContext("2d");ctx.drawImage(canvas,0,0,result.width,result.height,0,0,result.width,result.height);
+ const fileName="消失的第六頁_遊玩歷程_"+safeFileName(s.team.trim()||"探索隊")+(total>1?"_"+(page+1):"")+".png";
+ const a=document.createElement("a");a.download=fileName;a.href=result.toDataURL("image/png");document.body.appendChild(a);a.click();a.remove();
+ if(total>1){const el=document.getElementById("historyImagePages");if(el)el.innerHTML='<p class="small">完整時間軸共分成 '+total+' 張圖片，請逐張儲存：</p>'+Array.from({length:total},(_,i)=>'<button class="btn alt" onclick="saveHistoryPNG('+i+')">儲存第 '+(i+1)+' 張／共 '+total+' 張</button>').join("")}
+}
 
 function checkSquid(){if(get("squid")==="2")complete("museum","a");else toast('<p class="error">請區分「可以從標本觀察」與「無法只靠標本直接確定」。</p>')}
 function checkMech(){const a=clean(read("mech1")),b=clean(read("mech2")),c=clean(read("mech3"));if(a.includes("渾儀")&&b.includes("渾象")&&(c.includes("報時木閣")||c.includes("報時閣")||c==="木閣"))complete("museum","b");else toast('<p class="error">仍有裝置名稱不符合。請再查閱上、中、下層的用途與標示。</p>')}
